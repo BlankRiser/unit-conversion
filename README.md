@@ -1,17 +1,14 @@
 # @ram/unit-conversion
 
-An SDK for unit conversion
-
-
-### Inspiration
-
-
+An SDK for unit conversion. 
 
 ### How does it work?
 
 ```ts
 const conversion = new Conversion();
 
-conversion.value(10).from("meter").to("foot");
+const result = conversion.value(10).from("meter").to("foot");
+
+console.log(result);
 ```
 
