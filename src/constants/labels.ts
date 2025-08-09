@@ -1,3 +1,17 @@
+/**
+ * Constants for unit labels across different measurement domains.
+ * 
+ * Includes abbreviations for:
+ * - Time units (year, month, week, day, hour, minute, second, and sub-second units)
+ * - Length units (metric units like meter and its derivatives, imperial units like inch, foot)
+ * - Mass units (kilogram and derivatives, pound, ounce, etc.)
+ * - Amount of substance (mole)
+ * - Electric current related units (ampere, coulomb, volt, etc.)
+ * - Thermodynamic temperature units (kelvin, celsius, fahrenheit, etc.)
+ * - Luminous intensity units (candela, stilb)
+ * 
+ * @constant {Readonly<Record<string, string>>}
+ */
 export const LABELS = {
 	// time
 	year: "y",

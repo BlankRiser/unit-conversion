@@ -7,6 +7,21 @@ import {
   type ConversionFactor,
 } from "./utils/conversion-factors";
 
+/**
+ * Represents a value with conversion capabilities.
+ * 
+ * This class encapsulates a numeric value along with configuration
+ * for unit conversions. It provides the starting point for a fluent API
+ * to perform unit conversions.
+ * 
+ * @template T The numeric type of the value, constrained to number
+ * 
+ * @example
+ * ```ts
+ * // Creating a value and converting from meters to feet
+ * const length = new ValueWithFrom(5, config).from('m').to('ft');
+ * ```
+ */
 class ValueWithFrom<T extends number> {
   constructor(private val: T, private config: ConversionConfig) {}
 
@@ -15,6 +30,19 @@ class ValueWithFrom<T extends number> {
   }
 }
 
+/**
+ * Represents a value with a specific unit of measurement and provides conversion functionality.
+ * 
+ * @template T - The numeric type of the value (extends number)
+ * @template F - The unit type of the value (must be one of AllUnits)
+ * 
+ * @example
+ * ```ts
+ * // Convert 100 kilometers to miles
+ * const distance = new FromUnit(100, 'km', { decimals: 2, includeUnit: true });
+ * const inMiles = distance.to('mi'); // Returns "62.14mi"
+ * ```
+ */
 class FromUnit<T extends number, F extends AllUnits> {
   constructor(
     private val: T,
@@ -54,6 +82,18 @@ class FromUnit<T extends number, F extends AllUnits> {
   }
 }
 
+/**
+ * Represents a utility class for unit conversions.
+ * 
+ * The Conversion class provides a fluent API for converting values between different units.
+ * It allows customization through configuration options passed to the constructor.
+ * 
+ * @example
+ * ```ts
+ * const conversion = new Conversion();
+ * const result = conversion.value(5).from('meters').to('feet');
+ * ```
+ */
 export class Conversion {
   private config: ConversionConfig;
 

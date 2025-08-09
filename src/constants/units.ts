@@ -1,3 +1,15 @@
+/**
+ * Constants for unit conversion.
+ * @module UNITS
+ * @description
+ * This module exports a collection of units organized by measurement category.
+ * 
+ * @property {string[]} temperature - Units for temperature measurements (celsius, fahrenheit, kelvin)
+ * @property {string[]} length - Units for length measurements (meter, kilometer, centimeter, millimeter, inch, foot, yard, mile)
+ * @property {string[]} weight - Units for weight measurements (gram, kilogram, pound, ounce, ton)
+ * @property {string[]} volume - Units for volume measurements (liter, milliliter, gallon, quart, pint, cup, fluid-ounce)
+ * @property {string[]} time - Units for time measurements (second, minute, hour, day, week, month, year)
+ */
 export const UNITS = {
 	temperature: ["celsius", "fahrenheit", "kelvin"],
 	length: [
