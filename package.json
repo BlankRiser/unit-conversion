@@ -2,7 +2,7 @@
 	"name": "@devhaven/unit-conversion",
 	"version": "0.0.1",
 	"description": "A type-safe unit conversion library.",
-	"license": "ISC",
+	"license": "Apache-2.0",
 	"author": "Ram Shankar Choudhary",
 	"type": "module",
 	"main": "./dist/index.js",
