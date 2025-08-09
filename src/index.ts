@@ -8,12 +8,11 @@ export type {
 	TimeUnits,
 	UnitCategory,
 	VolumeUnits,
-	WeightUnits
+	WeightUnits,
 } from "./constants/units";
 export { Conversion } from "./main";
 export { getUnitCategory } from "./utils/common";
 export {
 	CONVERSION_FACTORS,
-	type ConversionFactor
+	type ConversionFactor,
 } from "./utils/conversion-factors";
-

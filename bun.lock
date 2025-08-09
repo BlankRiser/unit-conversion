@@ -9,7 +9,7 @@
         "@types/node": "^24.1.0",
         "@vitest/ui": "3.2.4",
         "bun-plugin-dts": "0.3.0",
-        "typescript": "^5.9.2",
+        "typescript": "5.9.2",
         "vitest": "3.2.4",
       },
     },
