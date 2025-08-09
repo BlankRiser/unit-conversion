@@ -1,5 +1,5 @@
 {
-	"name": "unit-conversion",
+	"name": "@ram/unit-conversion",
 	"version": "0.0.1",
 	"description": "A type-safe unit conversion library.",
 	"license": "ISC",
