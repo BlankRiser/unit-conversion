@@ -1,5 +1,5 @@
 {
-	"name": "@ram/unit-conversion",
+	"name": "@devhaven/unit-conversion",
 	"version": "0.0.1",
 	"description": "A type-safe unit conversion library.",
 	"license": "ISC",
