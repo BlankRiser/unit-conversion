@@ -1,7 +1,7 @@
 {
   "name": "@devhaven/unit-conversion",
-  "version": "0.0.2",
-  "exports": "./dist/index.js",
+  "version": "0.0.3",
+  "exports": "./src/index.ts",
   "license": "Apache-2.0",
   "publish": {
     "include": ["dist", "README.md", "jsr.jsonc", "LICENSE"]
