@@ -1,13 +1,21 @@
 {
-	"name": "@ram/unit-conversion",
+	"name": "unit-conversion",
 	"private": "false",
 	"version": "0.0.1",
-	"description": "unit conversion sdk",
+	"description": "A type-safe unit conversion library.",
 	"license": "ISC",
 	"author": "Ram Shankar Choudhary",
 	"type": "module",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		"types": "./dist/index.d.ts",
+		"import": "./dist/index.js",
+		"require": "./dist/index.cjs"
+	},
 	"scripts": {
-		"build": "rolldown --config ./rolldown.config.js",
+		"build": "bun run build.ts",
 		"dev": "bun --watch run src/index.ts",
 		"lint": "biome check src",
 		"lint:fix": "biome check --fix src",
@@ -15,12 +23,27 @@
 		"test:ui": "vitest --ui",
 		"test:run": "vitest run"
 	},
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"bun",
+		"unit-conversion"
+	],
+	"homepage": "https://github.com/BlankRiser/unit-conversion#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/BlankRiser/unit-conversion.git"
+	},
+	"bugs": {
+		"url": "https://github.com/BlankRiser/unit-conversion/issues"
+	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.3",
+		"@types/bun": "1.2.19",
 		"@types/node": "^24.1.0",
 		"@vitest/ui": "3.2.4",
-		"rolldown": "1.0.0-beta.30",
-		"rolldown-plugin-dts": "0.15.0",
+		"bun-plugin-dts": "0.3.0",
 		"typescript": "^5.9.2",
 		"vitest": "3.2.4"
 	}

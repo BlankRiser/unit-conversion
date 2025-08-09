@@ -1,8 +1,19 @@
+export { DEFAULT_CONFIG, type ConversionConfig } from "./constants/config";
+export { LABELS } from "./constants/labels";
+export { UNITS } from "./constants/units";
 export type {
 	AllUnits,
 	LengthUnits,
 	TemperatureUnits,
 	TimeUnits,
+	UnitCategory,
 	VolumeUnits,
-	WeightUnits,
-} from "./constants/units.js";
+	WeightUnits
+} from "./constants/units";
+export { Conversion } from "./main";
+export { getUnitCategory } from "./utils/common";
+export {
+	CONVERSION_FACTORS,
+	type ConversionFactor
+} from "./utils/conversion-factors";
+

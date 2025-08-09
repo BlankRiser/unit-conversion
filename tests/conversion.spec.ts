@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { Conversion } from "../src/main.js";
+import { Conversion } from "../src/main";
 
 test("Check conversion config", () => {
 	const withUnit = new Conversion({
