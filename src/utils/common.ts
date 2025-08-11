@@ -20,14 +20,22 @@ import type { CONVERSION_FACTORS } from "./conversion-factors.js";
  * // Throws an Error
  * getUnitCategory("unknown_unit");
  */
-export function getUnitCategory(
-	unit: AllUnits,
-): keyof typeof CONVERSION_FACTORS {
-	if (UNITS.temperature.includes(unit)) return "temperature";
-	if (UNITS.length.includes(unit)) return "length";
-	if (UNITS.weight.includes(unit)) return "weight";
-	if (UNITS.volume.includes(unit)) return "volume";
-	if (UNITS.time.includes(unit)) return "time";
+export function getUnitCategory(unit: AllUnits): keyof typeof CONVERSION_FACTORS {
+	if (isUnitInCategory(unit, "temperature")) return "temperature";
+	if (isUnitInCategory(unit, "length")) return "length";
+	if (isUnitInCategory(unit, "weight")) return "weight";
+	if (isUnitInCategory(unit, "volume")) return "volume";
+	if (isUnitInCategory(unit, "time")) return "time";
 
 	throw new Error(`Unknown unit: ${unit}`);
+}
+
+// Narrowing helper: checks if a unit belongs to a given category and narrows its type accordingly
+function isUnitInCategory<T extends keyof typeof UNITS>(
+	unit: AllUnits,
+	category: T,
+): unit is (typeof UNITS)[T][number] {
+	// We deliberately widen the array element type to AllUnits for the includes check,
+	// then use the type predicate to expose the precise narrowed type to callers.
+	return (UNITS[category] as ReadonlyArray<AllUnits>).includes(unit);
 }

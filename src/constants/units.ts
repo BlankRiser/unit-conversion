@@ -88,8 +88,7 @@ export const UNITS: ALL_UNITS = {
 	weight: ["gram", "kilogram", "pound", "ounce", "ton"],
 	volume: [
 		"liter",
-		"milliliter",		
-		"us-legal-cup",
+		"milliliter",
 		"us-legal-cup",
 		"imperial-cup",
 		"us-liquid-pint",
