@@ -1,6 +1,6 @@
 {
 	"name": "@devhaven/unit-conversion",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "A type-safe unit conversion library.",
 	"license": "Apache-2.0",
 	"author": "Ram Shankar Choudhary",
@@ -18,9 +18,10 @@
 		"dev": "bun --watch run src/index.ts",
 		"lint": "biome check src",
 		"lint:fix": "biome check --fix src",
-		"test": "vitest",
-		"test:ui": "vitest --ui",
-		"test:run": "vitest run"
+		"test": "vitest watch",
+		"test:run": "vitest run",
+		"test:watch": "vitest watch",
+		"test:ui": "vitest --ui"
 	},
 	"files": [
 		"dist"

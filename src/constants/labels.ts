@@ -1,6 +1,6 @@
 /**
  * Constants for unit labels across different measurement domains.
- * 
+ *
  * Includes abbreviations for:
  * - Time units (year, month, week, day, hour, minute, second, and sub-second units)
  * - Length units (metric units like meter and its derivatives, imperial units like inch, foot)
@@ -9,7 +9,7 @@
  * - Electric current related units (ampere, coulomb, volt, etc.)
  * - Thermodynamic temperature units (kelvin, celsius, fahrenheit, etc.)
  * - Luminous intensity units (candela, stilb)
- * 
+ *
  * @constant {Readonly<Record<string, string>>}
  */
 export const LABELS = {
@@ -55,6 +55,8 @@ export const LABELS = {
 	league: "lea",
 
 	// mass
+	liter: "l",
+	milliliter: "ml",
 	kilogram: "kg",
 	gram: "g",
 	milligram: "mg",
@@ -72,9 +74,20 @@ export const LABELS = {
 	pound: "lb",
 	ounce: "oz",
 	stone: "st",
-	"dalton (unified atomic mass unit)": "Da",
-	"atomic mass unit": "u",
+	dalton: "Da",
+	"atomic-mass-unit": "u",
 	carat: "ct",
+	"us-legal-cup": "cup (US)",
+	"imperial-cup": "cup (UK)",
+	"us-liquid-pint": "pt (US)",
+	"imperial-pint": "pt (UK)",
+	"us-legal-fluid-ounce": "fl oz (US)",
+	"imperial-fluid-ounce": "fl oz (UK)",
+	"cubic-millimeter": "mm^3",
+	"cubic-centimeter": "cm^3",
+	"cubic-meter": "m^3",
+	"cubic-foot": "ft^3",
+	"cubic-inch": "in^3",
 
 	// amount of substance
 	mole: "mol",

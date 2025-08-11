@@ -117,21 +117,41 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
 			toBase: (v: number) => v / 1000,
 			fromBase: (v: number) => v * 1000,
 		},
-		gallon: {
-			toBase: (v: number) => v * 3.78541,
-			fromBase: (v: number) => v / 3.78541,
+		"cubic-meter": {
+			toBase: (v: number) => v / 0.001,
+			fromBase: (v: number) => v * 0.001,
 		},
-		quart: {
-			toBase: (v: number) => v * 0.946353,
-			fromBase: (v: number) => v / 0.946353,
+		"cubic-centimeter": {
+			toBase: (v: number) => v / 1000,
+			fromBase: (v: number) => v * 1000,
 		},
-		pint: {
-			toBase: (v: number) => v * 0.473176,
-			fromBase: (v: number) => v / 0.473176,
+		"cubic-foot": {
+			toBase: (v: number) => v * 28.31685,
+			fromBase: (v: number) => v / 28.31685,
 		},
-		cup: {
-			toBase: (v: number) => v * 0.236588,
-			fromBase: (v: number) => v / 0.236588,
+		"cubic-inch": {
+			toBase: (v: number) => v / 61.023744095,
+			fromBase: (v: number) => v * 61.023744095,
+		},
+		"imperial-cup": {
+			toBase: (v: number) => v / 3.5195079728,
+			fromBase: (v: number) => v * 3.5195079728,
+		},
+		"us-legal-cup": {
+			toBase: (v: number) => v / 4.2267528377,
+			fromBase: (v: number) => v * 4.2267528377,
+		},
+		"us-liquid-pint": {
+			toBase: (v: number) => v / 2.1133764189,
+			fromBase: (v: number) => v * 2.1133764189,
+		},
+		"imperial-pint": {
+			toBase: (v: number) => v / 1.7597539864,
+			fromBase: (v: number) => v * 1.7597539864,
+		},
+		"imperial-fluid-ounce": {
+			toBase: (v: number) => v / 35.195079728,
+			fromBase: (v: number) => v * 35.195079728,
 		},
 	},
 
@@ -141,6 +161,10 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
 			isBaseUnit: true,
 			toBase: (v: number) => v,
 			fromBase: (v: number) => v,
+		},
+		millisecond: {
+			toBase: (v: number) => v / 1000,
+			fromBase: (v: number) => v * 1000,
 		},
 		minute: { toBase: (v: number) => v * 60, fromBase: (v: number) => v / 60 },
 		hour: {
