@@ -10,7 +10,9 @@
 
 <p align="center">
 <a href="https://github.com/BlankRiser/unit-conversion/actions?query=branch%3Amain"><img src="https://github.com/BlankRiser/unit-conversion/actions/workflows/release.yml/badge.svg?event=push&branch=main" alt="Zod CI status" /></a>
-<a href="https://opensource.org/licenses/apache-2-0" rel="nofollow"><img src="https://img.shields.io/github/license/Blankriser/unit-conversion" alt="License"></a>
+<a href="https://opensource.org/licenses/apache-2-0" rel="nofollow"><img src="https://img.shields.io/github/license/Blankriser/unit-conversion" alt="license"></a>
+<a href="https://www.npmjs.com/package/@devhaven/unit-conversion" rel="nofollow"><img src="https://img.shields.io/npm/v/@devhaven/unit-conversion" alt="npm"></a>
+<a href="https://jsr.io/@devhaven/unit-conversion" rel="nofollow"><img src="https://img.shields.io/jsr/v/@devhaven/unit-conversion" alt="jsr"></a>
 </p>
 
 

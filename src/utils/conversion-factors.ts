@@ -4,22 +4,24 @@ export interface ConversionFactorGroups {
 	};
 }
 
+type ConversionFactorCallback = (v: number) => number;
+
 export interface ConversionFactor {
 	isBaseUnit?: boolean;
-	toBase: (v: number) => number;
-	fromBase: (v: number) => number;
+	toBase: ConversionFactorCallback;
+	fromBase: ConversionFactorCallback;
 }
 
 /**
  * Comprehensive conversion factors for various unit categories.
- * 
+ *
  * This object contains conversion factors organized by unit categories (temperature, length, weight, volume, time).
  * Each category defines a base unit and conversion functions to/from that base unit for all supported units
  * in that category.
- * 
+ *
  * @constant
  * @type {ConversionFactorGroups}
- * 
+ *
  * @property {Object} temperature - Temperature conversions with Kelvin as base unit
  * @property {Object} length - Length conversions with meter as base unit
  * @property {Object} weight - Weight conversions with gram as base unit
@@ -87,6 +89,11 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
 			isBaseUnit: true,
 			toBase: (v: number) => v,
 			fromBase: (v: number) => v,
+		},
+		milligram: {
+			isBaseUnit: true,
+			toBase: (v: number) => v / 1000,
+			fromBase: (v: number) => v * 1000,
 		},
 		kilogram: {
 			toBase: (v: number) => v * 1000,

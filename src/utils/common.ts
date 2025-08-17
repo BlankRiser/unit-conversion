@@ -26,6 +26,7 @@ export function getUnitCategory(unit: AllUnits): keyof typeof CONVERSION_FACTORS
 	if (isUnitInCategory(unit, "weight")) return "weight";
 	if (isUnitInCategory(unit, "volume")) return "volume";
 	if (isUnitInCategory(unit, "time")) return "time";
+	if (isUnitInCategory(unit, "number")) return "number";
 
 	throw new Error(`Unknown unit: ${unit}`);
 }

@@ -1,6 +1,6 @@
 import { type ConversionConfig, DEFAULT_CONFIG } from "./constants/config";
 import { LABELS } from "./constants/labels";
-import type { AllUnits, UnitCategory } from "./constants/units";
+import { NO_UNITS_CATEGORIES, type AllUnits, type UnitCategory } from "./constants/units";
 import { getUnitCategory } from "./utils/common";
 import {
   CONVERSION_FACTORS,
@@ -45,7 +45,7 @@ class ValueWithFrom<T extends number> {
  */
 class FromUnit<T extends number, F extends AllUnits> {
   constructor(
-    private val: T,
+    private value: T,
     private fromUnit: F,
     private config: ConversionConfig
   ) {}
@@ -64,7 +64,7 @@ class FromUnit<T extends number, F extends AllUnits> {
     }
 
     // Convert from source unit to base unit, then to target unit
-    const baseValue = fromUnitFactors.toBase(this.val);
+    const baseValue = fromUnitFactors.toBase(this.value);
     const numericResult = toUnitFactors.fromBase(baseValue);
 
     const finalValue =
@@ -75,6 +75,9 @@ class FromUnit<T extends number, F extends AllUnits> {
     // Return with unit label if includeUnit is true (default)
     if (this.config.includeUnit !== false) {
       const unitLabel = LABELS[unit as keyof typeof LABELS] || unit;
+      if (NO_UNITS_CATEGORIES.includes(category.toString())) {
+        return finalValue;
+      }
       return `${finalValue}${unitLabel}`;
     }
 

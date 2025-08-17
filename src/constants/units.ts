@@ -9,7 +9,7 @@ export type LengthUnits =
 	| "foot"
 	| "yard"
 	| "mile";
-export type WeightUnits = "gram" | "kilogram" | "pound" | "ounce" | "ton";
+export type WeightUnits = "milligram" | "gram" | "kilogram" | "pound" | "ounce" | "ton";
 
 export type VolumeUnits =
 	| "liter"
@@ -34,12 +34,20 @@ export type TimeUnits =
 	| "month"
 	| "year";
 
+export type NumberUnits =
+	| "base10"
+	| "binary"
+	| "hexadecimal"
+	| "base2"
+	| "base8"
+
 export type AllUnits =
 	| TemperatureUnits
 	| LengthUnits
 	| WeightUnits
 	| VolumeUnits
-	| TimeUnits;
+	| TimeUnits
+	| NumberUnits
 
 export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
 	? TemperatureUnits
@@ -51,7 +59,9 @@ export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
 				? VolumeUnits
 				: T extends TimeUnits
 					? TimeUnits
-					: never;
+					: T extends NumberUnits
+						? NumberUnits
+						: never;
 
 export type ALL_UNITS = {
 	temperature: TemperatureUnits[];
@@ -59,6 +69,7 @@ export type ALL_UNITS = {
 	weight: WeightUnits[];
 	volume: VolumeUnits[];
 	time: TimeUnits[];
+	number: NumberUnits[];
 };
 
 /**
@@ -85,7 +96,7 @@ export const UNITS: ALL_UNITS = {
 		"yard",
 		"mile",
 	],
-	weight: ["gram", "kilogram", "pound", "ounce", "ton"],
+	weight: ["milligram","gram", "kilogram", "pound", "ounce", "ton"],
 	volume: [
 		"liter",
 		"milliliter",
@@ -109,4 +120,7 @@ export const UNITS: ALL_UNITS = {
 		"month",
 		"year",
 	],
+	number: ["base10", "binary", "hexadecimal", "base2", "base8"],
 };
+
+export const NO_UNITS_CATEGORIES = ["number"]

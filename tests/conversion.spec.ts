@@ -84,6 +84,7 @@ test("Test weight conversions", ()=>{
 	expect(convert.value(weightValue).from("gram").to("pound")).toBe("0.0022lb");
 	expect(convert.value(weightValue).from("gram").to("ounce")).toBe("0.0353oz");
 	expect(convert.value(weightValue).from("gram").to("ton")).toBe("0ton");
+	expect(convert.value(weightValue).from("gram").to("milligram")).toBe("1000mg");
 
 	expect(convert.value(weightValue).from("kilogram").to("gram")).toBe("1000g");
 	expect(convert.value(weightValue).from("kilogram").to("pound")).toBe("2.2046lb");
