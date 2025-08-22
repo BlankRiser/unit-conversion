@@ -1,15 +1,7 @@
-name: CI
+name: Release
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "src/**"
-  pull_request:
-    branches: [main]
-    paths:
-      - "src/**"
   release:
     types: [created]
 
@@ -22,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
