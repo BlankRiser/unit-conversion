@@ -7,6 +7,8 @@ import {
   type ConversionFactor,
 } from "./utils/conversion-factors";
 
+type InputValue = number | string;
+
 /**
  * Represents a value with conversion capabilities.
  * 
@@ -22,7 +24,7 @@ import {
  * const length = new ValueWithFrom(5, config).from('m').to('ft');
  * ```
  */
-class ValueWithFrom<T extends number> {
+class ValueWithFrom<T extends InputValue> {
   constructor(private val: T, private config: ConversionConfig) {}
 
   from<U extends AllUnits>(unit: U): FromUnit<T, U> {
@@ -43,14 +45,14 @@ class ValueWithFrom<T extends number> {
  * const inMiles = distance.to('mi'); // Returns "62.14mi"
  * ```
  */
-class FromUnit<T extends number, F extends AllUnits> {
+class FromUnit<T extends InputValue, F extends AllUnits> {
   constructor(
     private value: T,
     private fromUnit: F,
     private config: ConversionConfig
   ) {}
 
-  to<U extends UnitCategory<F>>(unit: U): number | string {
+  to<U extends UnitCategory<F>>(unit: U): InputValue {
     const category = getUnitCategory(this.fromUnit);
     const categoryFactors = CONVERSION_FACTORS[category];
 
@@ -63,14 +65,35 @@ class FromUnit<T extends number, F extends AllUnits> {
       throw new Error(`Cannot convert from ${this.fromUnit} to ${unit}`);
     }
 
-    // Convert from source unit to base unit, then to target unit
-    const baseValue = fromUnitFactors.toBase(this.value);
-    const numericResult = toUnitFactors.fromBase(baseValue);
+    // Handle type conversion properly based on input type
+    let baseValue: number | string;
+    if (typeof this.value === 'number') {
+      baseValue = (fromUnitFactors.toBase as (v: number) => InputValue)(this.value);
+    } else {
+      // Convert string to number for calculations
+      const numericValue = parseFloat(this.value as string);
+      if (Number.isNaN(numericValue)) {
+        throw new Error(`Invalid numeric value: ${this.value}`);
+      }
+      baseValue = (fromUnitFactors.toBase as (v: number) => InputValue)(numericValue);
+    }
 
-    const finalValue =
-      this.config.isFloat === false
-        ? Math.round(numericResult)
-        : Number(numericResult.toFixed(this.config.decimals ?? 2));
+    // Convert baseValue to number if it's a string for the final conversion
+    const baseNumeric = typeof baseValue === 'string' ? parseFloat(baseValue) : baseValue;
+    if (Number.isNaN(baseNumeric)) {
+      throw new Error(`Invalid base value after conversion: ${baseValue}`);
+    }
+
+    const numericResult = (toUnitFactors.fromBase as (v: number) => InputValue)(baseNumeric);
+
+
+    let finalValue = numericResult;
+    if(typeof numericResult === "number") {
+      finalValue =
+       this.config.isFloat === false
+         ? Math.round(numericResult)
+         : Number(numericResult.toFixed(this.config.decimals ?? 2));
+    }
 
     // Return with unit label if includeUnit is true (default)
     if (this.config.includeUnit !== false) {

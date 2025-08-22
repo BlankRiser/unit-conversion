@@ -9,6 +9,8 @@ export type {
 	UnitCategory,
 	VolumeUnits,
 	WeightUnits,
+	NumberUnits,
+	ALL_UNIT_CATEGORIES
 } from "./constants/units";
 export { Conversion } from "./main";
 export { getUnitCategory } from "./utils/common";

@@ -1,14 +1,6 @@
 export type TemperatureUnits = "celsius" | "fahrenheit" | "kelvin";
 
-export type LengthUnits =
-	| "meter"
-	| "kilometer"
-	| "centimeter"
-	| "millimeter"
-	| "inch"
-	| "foot"
-	| "yard"
-	| "mile";
+export type LengthUnits = "meter" | "kilometer" | "centimeter" | "millimeter" | "inch" | "foot" | "yard" | "mile";
 export type WeightUnits = "milligram" | "gram" | "kilogram" | "pound" | "ounce" | "ton";
 
 export type VolumeUnits =
@@ -24,30 +16,11 @@ export type VolumeUnits =
 	| "cubic-foot"
 	| "cubic-inch";
 
-export type TimeUnits =
-	| "millisecond"
-	| "second"
-	| "minute"
-	| "hour"
-	| "day"
-	| "week"
-	| "month"
-	| "year";
+export type TimeUnits = "millisecond" | "second" | "minute" | "hour" | "day" | "week" | "month" | "year";
 
-export type NumberUnits =
-	| "base10"
-	| "binary"
-	| "hexadecimal"
-	| "base2"
-	| "base8"
+export type NumberUnits = "binary" | "decimal" | "hexadecimal" | "base8";
 
-export type AllUnits =
-	| TemperatureUnits
-	| LengthUnits
-	| WeightUnits
-	| VolumeUnits
-	| TimeUnits
-	| NumberUnits
+export type AllUnits = TemperatureUnits | LengthUnits | WeightUnits | VolumeUnits | TimeUnits | NumberUnits;
 
 export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
 	? TemperatureUnits
@@ -63,7 +36,7 @@ export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
 						? NumberUnits
 						: never;
 
-export type ALL_UNITS = {
+export type ALL_UNIT_CATEGORIES = {
 	temperature: TemperatureUnits[];
 	length: LengthUnits[];
 	weight: WeightUnits[];
@@ -84,19 +57,10 @@ export type ALL_UNITS = {
  * @property {string[]} volume - Units for volume measurements (liter, milliliter, gallon, quart, pint, cup, fluid-ounce)
  * @property {string[]} time - Units for time measurements (second, minute, hour, day, week, month, year)
  */
-export const UNITS: ALL_UNITS = {
+export const UNITS: ALL_UNIT_CATEGORIES = {
 	temperature: ["celsius", "fahrenheit", "kelvin"],
-	length: [
-		"meter",
-		"kilometer",
-		"centimeter",
-		"millimeter",
-		"inch",
-		"foot",
-		"yard",
-		"mile",
-	],
-	weight: ["milligram","gram", "kilogram", "pound", "ounce", "ton"],
+	length: ["meter", "kilometer", "centimeter", "millimeter", "inch", "foot", "yard", "mile"],
+	weight: ["milligram", "gram", "kilogram", "pound", "ounce", "ton"],
 	volume: [
 		"liter",
 		"milliliter",
@@ -110,17 +74,8 @@ export const UNITS: ALL_UNITS = {
 		"cubic-foot",
 		"cubic-inch",
 	],
-	time: [
-		"millisecond",
-		"second",
-		"minute",
-		"hour",
-		"day",
-		"week",
-		"month",
-		"year",
-	],
-	number: ["base10", "binary", "hexadecimal", "base2", "base8"],
+	time: ["millisecond", "second", "minute", "hour", "day", "week", "month", "year"],
+	number: ["decimal", "binary", "hexadecimal", "base8"],
 };
 
-export const NO_UNITS_CATEGORIES = ["number"]
+export const NO_UNITS_CATEGORIES = ["number"];

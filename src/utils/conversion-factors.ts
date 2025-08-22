@@ -1,15 +1,39 @@
-export interface ConversionFactorGroups {
+type ConversionFactorCallback =
+	| ((v: string) => string)
+	| ((v: number) => number)
+	| ((v: number) => string)
+	| ((v: string) => number);
+
+export interface ConversionFactor {
+	/**
+	 * Indicates if this unit is the base unit for its category.
+	 * If true, conversion functions will treat this unit as the reference point.
+	 * For example, in the length category, "meter" is the base unit.
+	 */
+	isBaseUnit?: boolean;
+	/**
+	 * Converts a value from this unit to the base unit of its category.
+	 * For example, if this unit is "kilometer", it converts from kilometers to meters.
+	 * @param v - The value to convert
+	 * @returns The value in the base unit
+	 */
+	toBase: ConversionFactorCallback;
+	/**
+	 * Converts a value from the base unit of its category to this unit.
+	 * For example, if this unit is "kilometer", it converts from meters to kilometers.
+	 * @param v - The value in the base unit
+	 * @returns The value in this unit
+	 */
+	fromBase: ConversionFactorCallback;
+}
+
+/**
+ * Represents a group of conversion factors for different units.
+ */
+interface ConversionFactorGroups {
 	[category: string]: {
 		[unit: string]: ConversionFactor;
 	};
-}
-
-type ConversionFactorCallback = (v: number) => number;
-
-export interface ConversionFactor {
-	isBaseUnit?: boolean;
-	toBase: ConversionFactorCallback;
-	fromBase: ConversionFactorCallback;
 }
 
 /**
@@ -185,6 +209,128 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
 		week: {
 			toBase: (v: number) => v * 604_800,
 			fromBase: (v: number) => v / 604_800,
+		},
+	},
+
+	// Number (base: base10)
+	number: {
+		decimal: {
+			isBaseUnit: true,
+			toBase: (v: number) => v,
+			fromBase: (v: number) => v,
+		},
+		binary: {
+			fromBase: (decimalValue: number) => {
+				if (decimalValue === 0) return 0;
+				if (decimalValue < 0) throw new Error("Negative numbers are not supported");
+				if (!Number.isInteger(decimalValue)) throw new Error("Only integers are supported");
+
+				let binary = "";
+				let num = decimalValue;
+
+				while (num > 0) {
+					binary = (num % 2) + binary;
+					num = Math.floor(num / 2);
+				}
+
+				return parseInt(binary);
+			},
+			toBase: (binary: number) => {
+				if (binary === 0) return 0;
+				if (binary < 0) throw new Error("Negative numbers are not supported");
+				if (!Number.isInteger(binary)) throw new Error("Only integers are supported");
+				const binaryStr = binary.toString();
+				if (!/^[01]+$/.test(binaryStr)) {
+					throw new Error("Invalid binary number: must contain only 0s and 1s");
+				}
+
+				let decimal = 0;
+				let position = 0;
+				let num = binary;
+
+				while (num > 0) {
+					const digit = num % 10;
+					decimal += digit * 2 ** position;
+					num = Math.floor(num / 10);
+					position++;
+				}
+
+				return decimal;
+			},
+		},
+		base8: {
+			toBase: (octal: number) => {
+				if (octal === 0) return 0;
+				if (octal < 0) throw new Error("Negative numbers are not supported");
+				if (!Number.isInteger(octal)) throw new Error("Only integers are supported");
+
+				const octalStr = octal.toString();
+				if (!/^[0-7]+$/.test(octalStr)) {
+					throw new Error("Invalid octal number: must contain only digits 0-7");
+				}
+
+				let decimal = 0;
+				let position = 0;
+				let num = octal;
+
+				while (num > 0) {
+					const digit = num % 10;
+					decimal += digit * 8 ** position;
+					num = Math.floor(num / 10);
+					position++;
+				}
+
+				return decimal;
+			},
+			fromBase: (decimal: number): number => {
+				if (decimal === 0) return 0;
+				if (decimal < 0) throw new Error("Negative numbers are not supported");
+				if (!Number.isInteger(decimal)) throw new Error("Input must be an integer");
+
+				let num = Math.abs(decimal);
+				let result = "";
+
+				while (num > 0) {
+					const remainder = num % 8;
+					result = remainder.toString() + result;
+					num = Math.floor(num / 8);
+				}
+
+				return parseInt(result);
+			},
+		},
+		hexadecimal: {
+			toBase: (hex: number | string) => {
+				let hexValue = hex.toString().trim();
+
+				if (hexValue === "0") return 0;
+				if (hexValue.startsWith("0x")) hexValue = hexValue.slice(2); // Remove '0x' prefix if present
+				if (!/^[0-9A-Fa-f]+$/.test(hexValue)) {
+					throw new Error("Invalid hexadecimal number: must contain valid hex digits");
+				}
+
+				return parseInt(hexValue, 16);
+			},
+			fromBase: (decimal: number): string => {
+				if (decimal === 0) return "0";
+				if (decimal < 0) throw new Error("Negative numbers are not supported");
+				if (!Number.isInteger(decimal)) throw new Error("Input must be an integer");
+
+				let num = Math.abs(decimal);
+
+				const hexDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+
+				let result = "";
+
+				// Convert to base-16 by repeatedly dividing by 16 and collecting remainders
+				while (num > 0) {
+					const remainder = num % 16;
+					result = hexDigits[remainder] + result;
+					num = Math.floor(num / 16);
+				}
+
+				return result;
+			},
 		},
 	},
 };
