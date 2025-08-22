@@ -4,6 +4,7 @@
 		"formatWithErrors": true,
 		"lineWidth": 120,
 		"indentWidth": 2,
-		"bracketSpacing": true
+		"bracketSpacing": true,
+		"indentStyle": "space"
 	}
 }
