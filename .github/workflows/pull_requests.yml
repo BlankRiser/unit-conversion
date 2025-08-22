@@ -2,7 +2,13 @@ name: Code quality
 
 on:
   push:
+    branches: [main]
+    paths:
+      - "src/**"
   pull_request:
+    branches: [main]
+    paths:
+      - "src/**"
 
 jobs:
   quality:

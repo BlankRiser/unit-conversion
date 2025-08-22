@@ -1,7 +1,7 @@
 export interface ConversionConfig {
-	isFloat?: boolean;
-	includeUnit?: boolean;
-	decimals?: number;
+  isFloat?: boolean;
+  includeUnit?: boolean;
+  decimals?: number;
 }
 
 /**
@@ -12,7 +12,7 @@ export interface ConversionConfig {
  * @property {number} decimals - Number of decimal places to round the conversion result to. Default is 2.
  */
 export const DEFAULT_CONFIG: ConversionConfig = {
-	isFloat: true,
-	includeUnit: true,
-	decimals: 2,
+  isFloat: true,
+  includeUnit: true,
+  decimals: 2,
 };
