@@ -1,6 +1,6 @@
 {
   "name": "@devhaven/unit-conversion",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "exports": "./src/index.ts",
   "license": "Apache-2.0",
   "publish": {
