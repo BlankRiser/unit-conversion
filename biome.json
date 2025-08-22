@@ -1,10 +1,10 @@
 {
-	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-	"formatter": {
-		"formatWithErrors": true,
-		"lineWidth": 120,
-		"indentWidth": 2,
-		"bracketSpacing": true,
-		"indentStyle": "space"
-	}
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "formatter": {
+    "formatWithErrors": true,
+    "lineWidth": 120,
+    "indentWidth": 2,
+    "bracketSpacing": true,
+    "indentStyle": "space"
+  }
 }
