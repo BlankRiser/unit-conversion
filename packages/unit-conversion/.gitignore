@@ -1,0 +1,11 @@
+# Environment variables
+*.env
+
+# Build
+dist
+
+# Node.js
+node_modules
+
+# Rolldown
+.rolldown
