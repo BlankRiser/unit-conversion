@@ -1,0 +1,91 @@
+---
+title: "Length"
+template: doc
+---
+
+The **length** category provides conversions between SI units (meters, kilometers, centimeters, millimeters) and Imperial/US units (inches, feet, yards, miles).
+
+This category is useful for engineering, construction, design, or any domain where measurements need to be compared or converted across systems.
+
+## Supported Units
+
+- Metric: millimeter (mm), centimeter (cm), meter (m), kilometer (km)
+- Imperial / US: inch (in), foot (ft), yard (yd), mile (mi)
+
+## Quick Example
+
+```ts
+import { Conversion } from "unit-conversion-lib";
+
+const convert = new Conversion();
+
+// Convert 100 meters → kilometers
+console.log(convert.value(100).from("meter").to("kilometer"));
+// "0.1km"
+
+// Convert 1 inch → centimeters
+console.log(convert.value(1).from("inch").to("centimeter"));
+// "2.54cm"
+```
+
+## Common Conversions
+
+All conversions are approximate to the configured decimal precision.
+When `includeUnit` is false, only numeric values are returned.
+```ts
+const convert = new Conversion({ includeUnit: false });
+convert.value(1).from("meter").to("foot"); // 3.28
+```
+
+> SI units are exact; conversions involving Imperial/US units are approximations due to defined ratios.
+
+### Meters ↔ Kilometers
+
+```ts
+convert.value(1000).from("meter").to("kilometer"); // "1km"
+convert.value(2).from("kilometer").to("meter"); // "2000m"
+```
+
+### Meters ↔ Feet
+
+```ts
+convert.value(1).from("meter").to("foot"); // "3.28ft"
+convert.value(10).from("foot").to("meter"); // "3.05m"
+```
+
+### Inches ↔ Centimeters
+
+```ts
+convert.value(1).from("inch").to("centimeter"); // "2.54cm"
+convert.value(30).from("centimeter").to("inch"); // "11.81in"
+```
+
+### Miles ↔ Kilometers
+
+```ts
+convert.value(1).from("mile").to("kilometer"); // "1.609km"
+convert.value(5).from("kilometer").to("mile"); // "3.11mi"
+```
+
+### Yards ↔ Meters
+
+```ts
+convert.value(1).from("yard").to("meter"); // "0.914m"
+convert.value(50).from("meter").to("yard"); // "54.68yd"
+```
+
+
+## Configuration Options
+
+Conversions can be customized with global config values when creating a Conversion instance.
+
+```ts
+const convert = new Conversion({
+  decimals: 4,      // set precision
+  isFloat: true,    // keep decimals or round
+  includeUnit: true // whether to append unit symbol
+});
+
+console.log(convert.value(1).from("mile").to("kilometer"));
+// "1.6093km"
+```

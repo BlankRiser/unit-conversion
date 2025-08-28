@@ -1,0 +1,29 @@
+---
+title: "Number"
+template: doc
+---
+The **Number** category supports conversions between number bases such as binary, octal, decimal, and hexadecimal.
+
+## Supported Bases
+
+- binary (base 2)
+- octal (base 8)
+- decimal (base 10)
+- hexadecimal (base 16)
+
+
+## Quick Example
+```ts
+console.log(convert.value(255).from("decimal").to("hexadecimal")); 
+// "ff"
+
+console.log(convert.value("1010").from("binary").to("decimal")); 
+// "10"
+```
+
+## Common Conversions
+```ts
+convert.value(10).from("decimal").to("binary");      // "1010"
+convert.value("a").from("hexadecimal").to("decimal"); // "10"
+convert.value("77").from("octal").to("decimal");      // "63"
+```

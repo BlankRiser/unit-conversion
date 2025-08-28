@@ -6,6 +6,8 @@
     "packages/*"
   ],
   "scripts": {
+    "docs": "bun run --cwd apps/docs",
+    "docs:add": "bun add --cwd apps/docs",
     "convert": "bun run --cwd packages/unit-conversion",
     "convert:add": "bun add --cwd packages/unit-conversion"
   },

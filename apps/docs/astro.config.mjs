@@ -1,0 +1,41 @@
+// @ts-check
+
+import starlight from "@astrojs/starlight";
+import { defineConfig } from "astro/config";
+import starlightThemeRapide from "starlight-theme-rapide";
+
+// https://astro.build/config
+export default defineConfig({
+  integrations: [
+    starlight({
+      title: "Unit Conversion",
+      plugins: [starlightThemeRapide()],
+      social: [{ icon: "github", label: "GitHub", href: "https://github.com/BlankRiser/unit-conversion" }],
+      sidebar: [
+        // {
+        //   label: "Guides",
+        //   items: [
+        //     // Each item here is one entry in the navigation menu.
+        //     { label: "Example Guide", slug: "guides/example" },
+        //   ],
+        // },
+        {
+          label: "Overview",
+          slug: "index",
+        },
+        {
+          label: "Installation",
+          slug: "installation",
+        },
+        {
+          label: "API Reference",
+          slug: "api-reference",
+        },
+        {
+          label: "Conversions",
+          autogenerate: { directory: "conversions" },
+        },
+      ],
+    }),
+  ],
+});

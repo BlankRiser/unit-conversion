@@ -1,0 +1,36 @@
+---
+title: "Weight"
+template: doc
+---
+
+The **weight** category provides conversions between metric units (grams, kilograms, tonnes) and Imperial/US units (ounces, pounds, stones, tons).
+
+## Supported Units
+
+- Metric: milligram (mg), gram (g), kilogram (kg), tonne (t)
+- Imperial / US: ounce (oz), pound (lb), stone (st), ton (US ton)
+
+## Quick Example
+
+```ts
+import { Conversion } from "unit-conversion-lib";
+
+const convert = new Conversion();
+
+console.log(convert.value(1000).from("gram").to("kilogram")); 
+// "1kg"
+
+console.log(convert.value(1).from("pound").to("kilogram")); 
+// "0.454kg"
+```
+
+## Common Conversions
+
+
+```ts
+convert.value(1000).from("gram").to("kilogram"); // "1kg"
+convert.value(1).from("kilogram").to("pound");   // "2.205lb"
+convert.value(16).from("ounce").to("pound");     // "1lb"
+convert.value(1).from("stone").to("pound");      // "14lb"
+convert.value(1).from("tonne").to("ton");        // "1.102ton"
+```
