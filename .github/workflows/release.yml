@@ -32,15 +32,17 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Test package version consistency
-        run: bun run test:run
+        run: bun run convert test:run
 
       - name: Build
-        run: bun run build
+        run: bun run convert build
 
       - name: "Publish to NPM"
+        working-directory: ./packages/unit-conversion
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: npm publish --provenance --access=public
 
       - name: "Publish to JSR"
+        working-directory: ./packages/unit-conversion
         run: npx jsr publish

@@ -1,0 +1,27 @@
+---
+title: "Volume"
+template: doc
+---
+The Volume category converts between metric liters/milliliters and Imperial/US gallons, quarts, pints, cups, and fluid ounces.
+
+## Supported Units
+
+- Metric: milliliter (ml), liter (l)
+- Imperial / US: fluid ounce (fl oz), cup, pint (pt), quart (qt), gallon (gal)
+
+## Quick Example
+```ts
+console.log(convert.value(1000).from("milliliter").to("liter")); 
+// "1l"
+
+console.log(convert.value(1).from("gallon").to("liter")); 
+// "3.785l"
+```
+
+## Common Conversions
+```ts
+convert.value(1).from("liter").to("milliliter"); // "1000ml"
+convert.value(1).from("liter").to("quart");      // "1.057qt"
+convert.value(1).from("pint").to("cup");         // "2cup"
+convert.value(1).from("gallon").to("quart");     // "4qt"
+```

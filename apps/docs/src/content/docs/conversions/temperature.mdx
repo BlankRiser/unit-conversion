@@ -1,0 +1,30 @@
+---
+title: "Temperature"
+template: doc
+---
+
+The Temperature category supports conversions between Celsius, Fahrenheit, and Kelvin.
+
+## Supported Units
+
+- celsius (°C)
+- fahrenheit (°F)
+- kelvin (K)
+
+## Quick Example
+
+```ts
+console.log(convert.value(0).from("celsius").to("fahrenheit")); 
+// "32°F"
+
+console.log(convert.value(212).from("fahrenheit").to("celsius")); 
+// "100°C"
+```
+
+## Common Conversions
+
+```ts
+convert.value(1).from("day").to("hour");              // "24h"
+convert.value(3600).from("second").to("hour");        // "1h"
+convert.value(1000).from("millisecond").to("second"); // "1s"
+```
