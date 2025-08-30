@@ -18,11 +18,8 @@ The **time** category provides conversions between milliseconds, seconds, minute
 import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
-console.log(convert.value(60000).from("millisecond").to("minute")); 
-// "1min"
-
-console.log(convert.value(2).from("hour").to("minute")); 
-// "120min"
+console.log(convert.value(60000).from("millisecond").to("minute"));      // "1min"
+console.log(convert.value(2).from("hour").to("minute"));                 // "120min"
 ```
 
 ## Common Conversions
@@ -31,19 +28,19 @@ console.log(convert.value(2).from("hour").to("minute"));
 
 ```ts
 convert.value(1).from("day").to("hour");        // "24h"
-convert.value(24).from("hour").to("day");        // "1d"
+convert.value(24).from("hour").to("day");       // "1d"
 ```
 
 ### Second ↔ Hour
 
 ```ts
-convert.value(3600).from("second").to("hour");  // "1h"
-convert.value(1).from("hour").to("second");  // "3600s"
+convert.value(3600).from("second").to("hour");      // "1h"
+convert.value(1).from("hour").to("second");         // "3600s"
 ```
 
 ### Millisecond ↔ Second
 
 ```ts
-convert.value(1000).from("millisecond").to("second"); // "1s"
-convert.value(1).from("second").to("millisecond"); // "1000ms"
+convert.value(1000).from("millisecond").to("second");      // "1s"
+convert.value(1).from("second").to("millisecond");         // "1000ms"
 ```

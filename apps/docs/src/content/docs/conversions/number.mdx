@@ -14,11 +14,9 @@ The **Number** category supports conversions between number bases such as binary
 
 ## Quick Example
 ```ts
-console.log(convert.value(255).from("decimal").to("hexadecimal")); 
-// "ff"
+console.log(convert.value(255).from("decimal").to("hexadecimal"));    // "ff"
 
-console.log(convert.value("1010").from("binary").to("decimal")); 
-// "10"
+console.log(convert.value("1010").from("binary").to("decimal"));      // "10"
 ```
 
 ## Common Conversions
@@ -31,7 +29,7 @@ convert.value(10).from("binary").to("decimal");      // "1010"
 
 ### Decimal ↔ Hexadecimal
 ```ts
-convert.value("a").from("hexadecimal").to("decimal");      // "10"
+convert.value("a").from("hexadecimal").to("decimal");     // "10"
 convert.value(15).from("decimal").to("hexadecimal");      // "f"
 ```
 

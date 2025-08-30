@@ -17,11 +17,8 @@ import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-console.log(convert.value(1000).from("gram").to("kilogram"));
-// "1kg"
-
-console.log(convert.value(1).from("pound").to("kilogram"));
-// "0.454kg"
+console.log(convert.value(1000).from("gram").to("kilogram"));    // "1kg"
+console.log(convert.value(1).from("pound").to("kilogram"));      // "0.454kg"
 ```
 
 ## Common Conversions
@@ -29,13 +26,13 @@ console.log(convert.value(1).from("pound").to("kilogram"));
 ### Gram ↔ Kilogram
 
 ```ts
-convert.value(1000).from("gram").to("kilogram"); // "1kg"
-convert.value(1).from("kilogram").to("gram"); // "1000g"
+convert.value(1000).from("gram").to("kilogram");      // "1kg"
+convert.value(1).from("kilogram").to("gram");         // "1000g"
 
 ```
 ### Ounce ↔ Pound
 
 ```ts
-convert.value(16).from("ounce").to("pound"); // "1lb"
-convert.value(1).from("pound").to("ounce"); // "16oz"
+convert.value(16).from("ounce").to("pound");      // "1lb"
+convert.value(1).from("pound").to("ounce");       // "16oz"
 ```
