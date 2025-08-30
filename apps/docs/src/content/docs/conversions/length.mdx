@@ -14,8 +14,8 @@ This category is useful for engineering, construction, design, or any domain whe
 
 ## Quick Example
 
-```ts
-import { Conversion } from "unit-conversion-lib";
+```ts twoslash
+import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
@@ -31,13 +31,15 @@ console.log(convert.value(1).from("inch").to("centimeter"));
 ## Common Conversions
 
 All conversions are approximate to the configured decimal precision.
-When `includeUnit` is false, only numeric values are returned.
-```ts
+
+```ts twoslash
+import { Conversion } from "@devhaven/unit-conversion";
+
 const convert = new Conversion({ includeUnit: false });
 convert.value(1).from("meter").to("foot"); // 3.28
 ```
 
-> SI units are exact; conversions involving Imperial/US units are approximations due to defined ratios.
+> SI units are exact; conversions **involving** Imperial/US units are approximations due to defined ratios.
 
 ### Meters ↔ Kilometers
 
@@ -74,16 +76,17 @@ convert.value(1).from("yard").to("meter"); // "0.914m"
 convert.value(50).from("meter").to("yard"); // "54.68yd"
 ```
 
-
 ## Configuration Options
 
 Conversions can be customized with global config values when creating a Conversion instance.
 
-```ts
+```ts twoslash
+import { Conversion } from "@devhaven/unit-conversion";
+
 const convert = new Conversion({
-  decimals: 4,      // set precision
-  isFloat: true,    // keep decimals or round
-  includeUnit: true // whether to append unit symbol
+  decimals: 4, // set precision
+  isFloat: true, // keep decimals or round
+  includeUnit: true, // whether to append unit symbol
 });
 
 console.log(convert.value(1).from("mile").to("kilometer"));

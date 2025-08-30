@@ -22,8 +22,21 @@ console.log(convert.value("1010").from("binary").to("decimal"));
 ```
 
 ## Common Conversions
+
+### Binary ↔ Decimal
 ```ts
 convert.value(10).from("decimal").to("binary");      // "1010"
-convert.value("a").from("hexadecimal").to("decimal"); // "10"
-convert.value("77").from("octal").to("decimal");      // "63"
+convert.value(10).from("binary").to("decimal");      // "1010"
+```
+
+### Decimal ↔ Hexadecimal
+```ts
+convert.value("a").from("hexadecimal").to("decimal");      // "10"
+convert.value(15).from("decimal").to("hexadecimal");      // "f"
+```
+
+### Octal ↔ Decimal
+```ts
+convert.value(77).from("octal").to("decimal");      // "63"
+convert.value(77).from("decimal").to("octal");      // "115"
 ```

@@ -4,7 +4,7 @@ title: "API Reference"
 
 # Conversion
 
-```ts
+```ts twoslash
 import { Conversion } from "@devhaven/unit-conversion";
 
 const conversion = new Conversion();
@@ -19,7 +19,7 @@ const result = conversion.value(10).from("meter").to("foot");
 - Default: 2
 - Number of decimal places to round the conversion result to.
 
-```ts
+```ts twoslash
 import { Conversion } from "@devhaven/unit-conversion";
 
 const conversion = new Conversion({ decimals: 4 });
@@ -32,8 +32,22 @@ const result = conversion.value(10).from("meter").to("foot");
 - Default: false
 - If true, the conversion result will be a floating-point number.
 
+```ts twoslash
+import { Conversion } from "@devhaven/unit-conversion";
+
+const conversion = new Conversion({ isFloat: true });
+const result = conversion.value(10).from("meter").to("foot");
+```
+
 ##### includeUnit?: boolean
 
 - Optional
 - Default: false
 - If true, the conversion result will include the unit as a string.
+
+```ts twoslash
+import { Conversion } from "@devhaven/unit-conversion";
+
+const conversion = new Conversion({ includeUnit: false });
+const result = conversion.value(10).from("meter").to("foot");
+```
