@@ -13,24 +13,26 @@ The **weight** category provides conversions between metric units (grams, kilogr
 ## Quick Example
 
 ```ts
-import { Conversion } from "unit-conversion-lib";
+import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-console.log(convert.value(1000).from("gram").to("kilogram")); 
-// "1kg"
-
-console.log(convert.value(1).from("pound").to("kilogram")); 
-// "0.454kg"
+console.log(convert.value(1000).from("gram").to("kilogram"));    // "1kg"
+console.log(convert.value(1).from("pound").to("kilogram"));      // "0.454kg"
 ```
 
 ## Common Conversions
 
+### Gram ↔ Kilogram
 
 ```ts
-convert.value(1000).from("gram").to("kilogram"); // "1kg"
-convert.value(1).from("kilogram").to("pound");   // "2.205lb"
-convert.value(16).from("ounce").to("pound");     // "1lb"
-convert.value(1).from("stone").to("pound");      // "14lb"
-convert.value(1).from("tonne").to("ton");        // "1.102ton"
+convert.value(1000).from("gram").to("kilogram");      // "1kg"
+convert.value(1).from("kilogram").to("gram");         // "1000g"
+
+```
+### Ounce ↔ Pound
+
+```ts
+convert.value(16).from("ounce").to("pound");      // "1lb"
+convert.value(1).from("pound").to("ounce");       // "16oz"
 ```

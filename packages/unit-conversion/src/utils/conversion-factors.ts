@@ -172,6 +172,14 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
       toBase: (v: number) => v / 4.2267528377,
       fromBase: (v: number) => v * 4.2267528377,
     },
+    "us-gallon": {
+      toBase: (v: number) => v / 0.2641720524,
+      fromBase: (v: number) => v * 0.2641720524,
+    },
+    "imperial-gallon": {
+      toBase: (v: number) => v / 0.2199692483,
+      fromBase: (v: number) => v * 0.2199692483,
+    },
     "us-liquid-pint": {
       toBase: (v: number) => v / 2.1133764189,
       fromBase: (v: number) => v * 2.1133764189,

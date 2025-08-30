@@ -5,11 +5,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/**"
+      - "apps/**"
   pull_request:
     branches: [main]
     paths:
-      - "src/**"
+      - "apps/**"
 
 jobs:
   quality:

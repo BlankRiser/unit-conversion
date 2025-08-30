@@ -77,6 +77,8 @@ export const LABELS = {
   dalton: "Da",
   "atomic-mass-unit": "u",
   carat: "ct",
+  "us-gallon": "gallon (US)",
+  "imperial-gallon": "gallon (UK)",
   "us-legal-cup": "cup (US)",
   "imperial-cup": "cup (UK)",
   "us-liquid-pint": "pt (US)",

@@ -2,21 +2,24 @@
 title: "Getting Started"
 template: doc
 ---
-
 import { PackageManagers } from "starlight-package-managers";
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import { Code } from '@astrojs/starlight/components'
 
 # Installation
 
 You can install `@devhaven/unit-conversion` from [npm](https://www.npmjs.com/package/@devhaven/unit-conversion):
+
 
 <PackageManagers
   pkg="@devhaven/unit-conversion"
   pkgManagers={["npm", "yarn", "pnpm", "bun"]}
 />
 
+
 or [JSR](https://jsr.io/@devhaven/unit-conversion):
 
-```
+```bash
 npx jsr add @devhaven/unit-conversion
 # or
 yarn add jsr:@devhaven/unit-conversion
