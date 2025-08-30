@@ -19,7 +19,7 @@
     },
     "packages/unit-conversion": {
       "name": "@devhaven/unit-conversion",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "devDependencies": {
         "@biomejs/biome": "2.1.3",
         "@types/bun": "1.2.19",
@@ -1290,6 +1290,8 @@
     "cliui/strip-ansi": ["strip-ansi@6.0.1", "", { "dependencies": { "ansi-regex": "^5.0.1" } }, "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A=="],
 
     "cliui/wrap-ansi": ["wrap-ansi@7.0.0", "", { "dependencies": { "ansi-styles": "^4.0.0", "string-width": "^4.1.0", "strip-ansi": "^6.0.0" } }, "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q=="],
+
+    "docs/@devhaven/unit-conversion": ["@devhaven/unit-conversion@0.0.6", "", {}, "sha512-2IU5/YS7wuRuTn2sAJqa5K9pHw34UzxasWSmC1lm8DC5TIJpZ90WB6HzXpfZc6/OdYNJBt3tHPKbU1aeE1Y4VA=="],
 
     "hast-util-to-parse5/property-information": ["property-information@6.5.0", "", {}, "sha512-PgTgs/BlvHxOu8QuEN7wi5A0OmXaBcHpmCSTehcs6Uuu9IkDIEo13Hy7n898RHfrQ49vKCoGeWZSaAK01nwVig=="],
 
