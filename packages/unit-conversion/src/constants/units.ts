@@ -20,7 +20,9 @@ export type TimeUnits = "millisecond" | "second" | "minute" | "hour" | "day" | "
 
 export type NumberUnits = "binary" | "decimal" | "hexadecimal" | "base8";
 
-export type AllUnits = TemperatureUnits | LengthUnits | WeightUnits | VolumeUnits | TimeUnits | NumberUnits;
+export type ForceUnits = "newton" | "dyne" | "pound-force" | "kilogram-force" | "poundal";
+
+export type AllUnits = TemperatureUnits | LengthUnits | WeightUnits | VolumeUnits | TimeUnits | NumberUnits | ForceUnits;
 
 export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
   ? TemperatureUnits
@@ -34,7 +36,9 @@ export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
           ? TimeUnits
           : T extends NumberUnits
             ? NumberUnits
-            : never;
+            : T extends ForceUnits
+              ? ForceUnits
+              : never;
 
 export type ALL_UNIT_CATEGORIES = {
   temperature: TemperatureUnits[];
@@ -43,6 +47,7 @@ export type ALL_UNIT_CATEGORIES = {
   volume: VolumeUnits[];
   time: TimeUnits[];
   number: NumberUnits[];
+  force: ForceUnits[];
 };
 
 /**
@@ -76,6 +81,7 @@ export const UNITS: ALL_UNIT_CATEGORIES = {
   ],
   time: ["millisecond", "second", "minute", "hour", "day", "week", "month", "year"],
   number: ["decimal", "binary", "hexadecimal", "base8"],
+  force: ["newton", "dyne", "pound-force", "kilogram-force", "poundal"],
 };
 
 export const NO_UNITS_CATEGORIES = ["number"];

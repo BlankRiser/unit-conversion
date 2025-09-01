@@ -10,6 +10,7 @@ export type {
   UnitCategory,
   VolumeUnits,
   WeightUnits,
+  ForceUnits
 } from "./constants/units";
 export { UNITS } from "./constants/units";
 export { Conversion } from "./main";

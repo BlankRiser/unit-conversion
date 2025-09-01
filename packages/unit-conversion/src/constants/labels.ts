@@ -112,11 +112,20 @@ export const LABELS = {
   fahrenheit: "°F",
   rankine: "°R",
   delisle: "°De",
-  newton: "°N",
+  "newton-degree": "°N",
   réaumur: "°Ré",
   rømer: "°Rø",
 
   // luminous intensity
   candela: "cd",
   stilb: "sb",
+
+  // Force
+  newton: "N",
+  dyne: "dyn",
+  poundal: "pdl",
+  "pound-force": "lbf",
+  "kilogram-force": "kgf",
+
+
 } as const;
