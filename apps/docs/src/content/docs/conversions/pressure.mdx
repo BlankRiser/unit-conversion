@@ -1,0 +1,45 @@
+---
+title: "Pressure"
+template: doc
+---
+
+The Pressure category supports conversions between Pascal, Kilopascal, Bar, PSI, and standard atmosphere.
+
+## Supported Units
+
+- Pascal (Pa)
+- Kilopascal (kPa)
+- Bar (bar)
+- PSI (psi)
+- Standard Atmosphere (atm)
+
+## Quick Example
+
+```ts
+import { Conversion } from "@devhaven/unit-conversion";
+
+const convert = new Conversion();
+
+convert.value(100).from("pascal").to("kilopascal");      
+convert.value(1).from("kilopascal").to("pascal");    
+```
+
+## Common Conversions
+
+### Pascal ↔ Bar
+```ts
+convert.value(1).from("pascal").to("bar");    
+convert.value(1).from("bar").to("pascal");      
+```
+
+### Kilopascal ↔ PSI
+```ts
+convert.value(1).from("kilopascal").to("psi");     
+convert.value(1).from("psi").to("kilopascal");      
+```
+
+### Bar ↔ PSI
+```ts
+convert.value(1).from("bar").to("psi");     
+convert.value(1).from("psi").to("bar");      
+```

@@ -14,9 +14,12 @@ The Temperature category supports conversions between Celsius, Fahrenheit, and K
 ## Quick Example
 
 ```ts
-console.log(convert.value(0).from("celsius").to("fahrenheit"));      // "32°F"
+import { Conversion } from "@devhaven/unit-conversion";
 
-console.log(convert.value(212).from("fahrenheit").to("celsius"));    // "100°C"
+const convert = new Conversion();
+
+convert.value(0).from("celsius").to("fahrenheit");      
+convert.value(212).from("fahrenheit").to("celsius");    
 ```
 
 ## Common Conversions
@@ -24,12 +27,12 @@ console.log(convert.value(212).from("fahrenheit").to("celsius"));    // "100°C"
 
 ### Celsius ↔ Kelvin
 ```ts
-convert.value(100).from("celsius").to("kelvin");    // "373.15K"
-convert.value(0).from("kelvin").to("celsius");      // "-273.15°C"
+convert.value(100).from("celsius").to("kelvin");    
+convert.value(0).from("kelvin").to("celsius");      
 ```
 
 ### Celsius ↔ Fahrenheit
 ```ts
-convert.value(100).from("celsius").to("fahrenheit");     // "212°F"
-convert.value(32).from("fahrenheit").to("celsius");      // "0°C"
+convert.value(100).from("celsius").to("fahrenheit");     
+convert.value(32).from("fahrenheit").to("celsius");      
 ```

@@ -4,7 +4,7 @@ import type { AllUnits, UnitCategory } from "./constants/units";
 import { getUnitCategory } from "./utils/common";
 import { CONVERSION_FACTORS, type ConversionFactor } from "./utils/conversion-factors";
 
-type InputValue = number | string;
+type UnitType = number | string;
 
 /**
  * Represents a value with conversion capabilities.
@@ -21,7 +21,7 @@ type InputValue = number | string;
  * const length = new ValueWithFrom(5, config).from('m').to('ft');
  * ```
  */
-class ValueWithFrom<T extends InputValue> {
+class ValueWithFrom<T extends UnitType> {
   constructor(
     private val: T,
     private config: ConversionConfig,
@@ -45,7 +45,7 @@ class ValueWithFrom<T extends InputValue> {
  * const inMiles = distance.to('mi'); // Returns { value: 62.14, unit: 'mi' }
  * ```
  */
-class FromUnit<T extends InputValue, F extends AllUnits> {
+class FromUnit<T extends UnitType, F extends AllUnits> {
   constructor(
     private value: T,
     private fromUnit: F,
@@ -66,14 +66,14 @@ class FromUnit<T extends InputValue, F extends AllUnits> {
     // Handle type conversion properly based on input type
     let baseValue: number | string;
     if (typeof this.value === "number") {
-      baseValue = (fromUnitFactors.toBase as (v: number) => InputValue)(this.value);
+      baseValue = (fromUnitFactors.toBase as (v: number) => UnitType)(this.value);
     } else {
       // Convert string to number for calculations
       const numericValue = parseFloat(this.value as string);
       if (Number.isNaN(numericValue)) {
         throw new Error(`Invalid numeric value: ${this.value}`);
       }
-      baseValue = (fromUnitFactors.toBase as (v: number) => InputValue)(numericValue);
+      baseValue = (fromUnitFactors.toBase as (v: number) => UnitType)(numericValue);
     }
 
     // Convert baseValue to number if it's a string for the final conversion
@@ -82,7 +82,7 @@ class FromUnit<T extends InputValue, F extends AllUnits> {
       throw new Error(`Invalid base value after conversion: ${baseValue}`);
     }
 
-    const numericResult = (toUnitFactors.fromBase as (v: number) => InputValue)(baseNumeric);
+    const numericResult = (toUnitFactors.fromBase as (v: number) => UnitType)(baseNumeric);
 
     let finalValue = numericResult;
     if (typeof numericResult === "number") {

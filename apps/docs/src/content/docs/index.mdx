@@ -14,10 +14,7 @@ import { Conversion } from "@devhaven/unit-conversion";
 const convert = new Conversion();
 
 // Convert 100 meters → kilometers
-console.log(convert.value(100).from("meter").to("kilometer"));
-// "0.1km"
-
-// Convert 1 inch → centimeters
-console.log(convert.value(1).from("inch").to("centimeter"));
-// "2.54cm"
+const { value, unit } = convert.value(100).from("meter").to("kilometer");
+console.log(value, unit);
+// 0.1, "km"
 ```

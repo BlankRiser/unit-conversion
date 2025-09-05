@@ -13,28 +13,32 @@ The **Number** category supports conversions between number bases such as binary
 
 
 ## Quick Example
-```ts
-console.log(convert.value(255).from("decimal").to("hexadecimal"));    // "ff"
 
-console.log(convert.value("1010").from("binary").to("decimal"));      // "10"
+```ts twoslash
+import { Conversion } from "@devhaven/unit-conversion";
+
+const convert = new Conversion();
+
+convert.value(255).from("decimal").to("hexadecimal")
+convert.value(1010).from("binary").to("decimal")
 ```
 
 ## Common Conversions
 
 ### Binary ↔ Decimal
 ```ts
-convert.value(10).from("decimal").to("binary");      // "1010"
-convert.value(10).from("binary").to("decimal");      // "1010"
+convert.value(10).from("decimal").to("binary");      
+convert.value(10).from("binary").to("decimal");      
 ```
 
 ### Decimal ↔ Hexadecimal
 ```ts
-convert.value("a").from("hexadecimal").to("decimal");     // "10"
-convert.value(15).from("decimal").to("hexadecimal");      // "f"
+convert.value("a").from("hexadecimal").to("decimal");     
+convert.value(15).from("decimal").to("hexadecimal");      
 ```
 
 ### Octal ↔ Decimal
 ```ts
-convert.value(77).from("octal").to("decimal");      // "63"
-convert.value(77).from("decimal").to("octal");      // "115"
+convert.value(77).from("octal").to("decimal");      
+convert.value(77).from("decimal").to("octal");      
 ```

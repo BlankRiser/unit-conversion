@@ -44,36 +44,36 @@ convert.value(1).from("meter").to("foot");      // 3.28
 ### Meters ↔ Kilometers
 
 ```ts
-convert.value(1000).from("meter").to("kilometer");      // "1km"
-convert.value(2).from("kilometer").to("meter");         // "2000m"
+convert.value(1000).from("meter").to("kilometer");  
+convert.value(2).from("kilometer").to("meter");     
 ```
 
 ### Meters ↔ Feet
 
 ```ts
-convert.value(1).from("meter").to("foot");      // "3.28ft"
-convert.value(10).from("foot").to("meter");     // "3.05m"
+convert.value(1).from("meter").to("foot");  
+convert.value(10).from("foot").to("meter"); 
 ```
 
 ### Inches ↔ Centimeters
 
 ```ts
-convert.value(1).from("inch").to("centimeter");      // "2.54cm"
-convert.value(30).from("centimeter").to("inch");     // "11.81in"
+convert.value(1).from("inch").to("centimeter");  
+convert.value(30).from("centimeter").to("inch"); 
 ```
 
 ### Miles ↔ Kilometers
 
 ```ts
-convert.value(1).from("mile").to("kilometer");      // "1.609km"
-convert.value(5).from("kilometer").to("mile");      // "3.11mi"
+convert.value(1).from("mile").to("kilometer");  
+convert.value(5).from("kilometer").to("mile");  
 ```
 
 ### Yards ↔ Meters
 
 ```ts
-convert.value(1).from("yard").to("meter");      // "0.914m"
-convert.value(50).from("meter").to("yard");     // "54.68yd"
+convert.value(1).from("yard").to("meter");  
+convert.value(50).from("meter").to("yard"); 
 ```
 
 ## Configuration Options
@@ -86,8 +86,8 @@ import { Conversion } from "@devhaven/unit-conversion";
 const convert = new Conversion({
   decimals: 4,       // set precision
   isFloat: true,     // keep decimals or round
-  includeUnit: true, // whether to append unit symbol
 });
 
-console.log(convert.value(1).from("mile").to("kilometer"));      // "1.6093km"
+const { value, unit } = convert.value(1).from("mile").to("kilometer");  
+console.log(value, unit); 
 ```
