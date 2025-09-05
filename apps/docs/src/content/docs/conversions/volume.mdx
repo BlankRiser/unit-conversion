@@ -6,34 +6,36 @@ The Volume category converts between metric liters/milliliters and Imperial/US g
 
 ## Supported Units
 
-- Metric: milliliter (ml), liter (l)
-- Imperial / US: fluid ounce (fl oz), cup, pint (pt), quart (qt), gallon (gal)
+- Metric: milliliter `ml`, liter `l`
+- Imperial / US: fluid ounce `fl oz`, cup, pint `pt`, quart `qt`, gallon `gal`
 
 ## Quick Example
 ```ts
-console.log(convert.value(1000).from("milliliter").to("liter")); 
-// "1l"
+import { Conversion } from "@devhaven/unit-conversion";
 
-console.log(convert.value(1).from("gallon").to("liter")); 
-// "3.785l"
+const convert = new Conversion();
+
+convert.value(1000).from("milliliter").to("liter"); 
+convert.value(1).from("gallon").to("liter"); 
+
 ```
 
 ## Common Conversions
 
 ### Liter ↔ Milliliter
 ```ts
-convert.value(1).from("liter").to("milliliter");      // "1000ml"
-convert.value(1).from("milliliter").to("liter");      // "0.001l"
+convert.value(1).from("liter").to("milliliter");      
+convert.value(1).from("milliliter").to("liter");      
 ```
 
 ### Liter ↔ Cubic Meter
 ```ts
-convert.value(1).from("liter").to("cubic-meter");      // "0.001m^3"
-convert.value(1).from("cubic-meter").to("liter");      // "1000l"
+convert.value(1).from("liter").to("cubic-meter");      
+convert.value(1).from("cubic-meter").to("liter");      
 ```
 
 ### Cup (US) ↔ Milliliter
 ```ts
-convert.value(1).from("us-legal-cup").to("milliliter");      // "236.5882ml"
-convert.value(1).from("milliliter").to("us-legal-cup");      // "0.0042cup (US)"
+convert.value(1).from("us-legal-cup").to("milliliter");      
+convert.value(1).from("milliliter").to("us-legal-cup");      
 ```

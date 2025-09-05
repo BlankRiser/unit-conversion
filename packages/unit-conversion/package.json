@@ -1,6 +1,6 @@
 {
   "name": "@devhaven/unit-conversion",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "A type-safe unit conversion library.",
   "license": "Apache-2.0",
   "author": "Ram Shankar Choudhary",

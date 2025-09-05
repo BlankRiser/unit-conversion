@@ -1,0 +1,60 @@
+---
+title: "Energy"
+template: doc
+---
+
+The energy category supports conversions between Joule, Kilojoule, Calorie, Calorie (International Table), Calorie (Thermochemical), Watt-Hour, Kilowatt-Hour and Electron-Volt.
+
+## Supported Units
+
+- Joule `J`
+- Kilojoule `kJ`
+- Calorie `cal`
+- Calorie International Table `cal (IT)`
+- Calorie Thermochemical `cal (th)`
+- Watt-Hour `Wh`
+- Kilowatt-Hour `kWh`
+- Electron-Volt `eV`
+
+## Quick Example
+
+```ts
+import { Conversion } from "@devhaven/unit-conversion";
+
+const convert = new Conversion();
+
+convert.value(0).from("joule").to("kilojoule");      
+convert.value(212).from("kilojoule").to("joule");    
+```
+
+## Common Conversions
+
+### Joule ↔ Kilojoule
+```ts
+convert.value(1).from("joule").to("kilojoule");    
+convert.value(1).from("kilojoule").to("joule");      
+```
+
+### Joule ↔ Electron-Volt
+```ts
+convert.value(1).from("joule").to("electron-volt");    
+convert.value(1).from("electron-volt").to("joule");      
+```
+
+### Kilojoule ↔ Calorie
+```ts
+convert.value(1).from("kilojoule").to("calorie");     
+convert.value(1).from("calorie").to("kilojoule");      
+```
+
+### Calorie ↔ Electron Volt
+```ts
+convert.value(1).from("calorie").to("electron-volt");     
+convert.value(1).from("electron-volt").to("calorie");      
+```
+
+### Calorie ↔ Electron Volt
+```ts
+convert.value(1).from("calorie").to("electron-volt");     
+convert.value(1).from("electron-volt").to("calorie");      
+```
