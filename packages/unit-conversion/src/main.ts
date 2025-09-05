@@ -7,6 +7,18 @@ import { CONVERSION_FACTORS, type ConversionFactor } from "./utils/conversion-fa
 type UnitType = number | string;
 
 /**
+ * Represents the result of a unit conversion.
+ *
+ * @template T - The type of the converted value (number | string)
+ */
+interface ConversionResult<T extends UnitType = UnitType> {
+  /** The converted value */
+  value: T;
+  /** The unit label/abbreviation for the target unit */
+  unit: string;
+}
+
+/**
  * Represents a value with conversion capabilities.
  *
  * This class encapsulates a numeric value along with configuration
@@ -52,7 +64,7 @@ class FromUnit<T extends UnitType, F extends AllUnits> {
     private config: ConversionConfig,
   ) {}
 
-  to<U extends UnitCategory<F>>(unit: U) {
+  to<U extends UnitCategory<F>>(unit: U): ConversionResult {
     const category = getUnitCategory(this.fromUnit);
     const categoryFactors = CONVERSION_FACTORS[category];
 
