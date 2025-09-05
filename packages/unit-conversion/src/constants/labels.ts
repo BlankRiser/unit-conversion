@@ -104,7 +104,6 @@ export const LABELS = {
   farad: "F",
   henry: "H",
   hertz: "Hz",
-  joule: "J",
 
   // thermodynamic temperature
   kelvin: "K",
@@ -119,4 +118,21 @@ export const LABELS = {
   // luminous intensity
   candela: "cd",
   stilb: "sb",
+
+  // pressure
+  pascal: "Pa",
+  kilopascal: "kPa",
+  bar: "bar",
+  psi: "psi",
+  atmosphere: "atm",
+
+  // energy
+  joule: "J",
+  kilojoule: "kJ",
+  calorie: "cal",
+  "calorie-international-table": "cal (IT)",
+  "calorie-thermochemical": "cal (th)",
+  "watt-hour": "Wh",
+  "kilowatt-hour": "kWh",
+  "electron-volt": "eV",
 } as const;

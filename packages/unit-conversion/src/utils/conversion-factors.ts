@@ -339,4 +339,52 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
       },
     },
   },
+
+  // Pressure (base: pascal)
+  pressure: {
+    pascal: {
+      isBaseUnit: true,
+      toBase: (v: number) => v,
+      fromBase: (v: number) => v,
+    },
+    kilopascal: {
+      isBaseUnit: true,
+      toBase: (v: number) => v * 1000,
+      fromBase: (v: number) => v / 1000,
+    },
+    bar: {
+      toBase: (v: number) => v * 100_000,
+      fromBase: (v: number) => v / 100_000,
+    },
+    psi: {
+      toBase: (v: number) => v * 6894.76,
+      fromBase: (v: number) => v / 6894.76,
+    },
+    atmosphere: {
+      toBase: (v: number) => v * 101325,
+      fromBase: (v: number) => v / 101325,
+    },
+  },
+
+  // Energy (base: joule)
+  energy: {
+    joule: { toBase: (v: number) => v, fromBase: (v: number) => v },
+    kilojoule: { toBase: (v: number) => v * 1000, fromBase: (v: number) => v / 1000 },
+    calorie: { toBase: (v: number) => v / 0.0002388459, fromBase: (v: number) => v * 0.0002388459 },
+    "calorie-international-table": {
+      toBase: (v: number) => v / 0.2388458966,
+      fromBase: (v: number) => v * 0.2388458966,
+    },
+    "calorie-thermochemical": { toBase: (v: number) => v / 0.2390057361, fromBase: (v: number) => v * 0.2390057361 },
+    "watt-hour": { toBase: (v: number) => v / 0.0002777778, fromBase: (v: number) => v * 0.0002777778 },
+    "kilowatt-hour": {
+      toBase: (v: number) => v / (2.777777777 * 10 ** -7),
+      fromBase: (v: number) => v * (2.777777777 * 10 ** -7),
+    },
+    "electron-volt": {
+      toBase: (v: number) => v / 6241509074461000000,
+      fromBase: (v: number) => v * 6241509074461000000,
+    },
+  },
+  // Angle (base: radian)
 };
