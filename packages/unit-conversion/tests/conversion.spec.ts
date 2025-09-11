@@ -476,30 +476,32 @@ describe("Test energy conversions", () => {
 
 describe("Test force conversions", () => {
   const forceTests: Array<TestValues> = [
-    { value: 1, from: "newton", to: "pound-force", expected: "0.2248lbf" },
-    { value: 1, from: "newton", to: "kilogram-force", expected: "0.1019kgf" },
-    { value: 1, from: "newton", to: "dyne", expected: "100000dyn" },
-    { value: 1, from: "newton", to: "poundal", expected: "7.2330pdl" },
-    { value: 1, from: "dyne", to: "newton", expected: "0.00001N" },
-    { value: 1, from: "dyne", to: "pound-force", expected: "0lbf" },
-    { value: 1, from: "dyne", to: "kilogram-force", expected: "0kgf" },
-    { value: 1, from: "dyne", to: "poundal", expected: "0.0001pdl" },
-    { value: 1, from: "poundal", to: "newton", expected: "0.1383N" },
-    { value: 1, from: "poundal", to: "dyne", expected: "13825.5dyn" },
-    { value: 1, from: "poundal", to: "pound-force", expected: "0.03108lbf" },
-    { value: 1, from: "poundal", to: "kilogram-force", expected: "0.01409kgf" },
-    { value: 1, from: "pound-force", to: "newton", expected: "4.4482N" },
-    { value: 1, from: "pound-force", to: "kilogram-force", expected: "0.4536kgf" },
-    { value: 1, from: "kilogram-force", to: "newton", expected: "9.8066N" },
-    { value: 1, from: "kilogram-force", to: "pound-force", expected: "2.2046lbf" },
+    { value: 1, from: "newton", to: "pound-force", expected: "0.2248", unit: "lbf" },
+    { value: 1, from: "newton", to: "kilogram-force", expected: "0.1019", unit: "kgf" },
+    { value: 1, from: "newton", to: "dyne", expected: "100000", unit: "dyn" },
+    { value: 1, from: "newton", to: "poundal", expected: "7.2330", unit: "pdl" },
+    { value: 1, from: "dyne", to: "newton", expected: "0.00001", unit: "N" },
+    { value: 1, from: "dyne", to: "pound-force", expected: "0", unit: "lbf" },
+    { value: 1, from: "dyne", to: "kilogram-force", expected: "0", unit: "kgf" },
+    { value: 1, from: "dyne", to: "poundal", expected: "0.00001", unit: "pdl" },
+    { value: 1, from: "poundal", to: "newton", expected: "0.1383", unit: "N" },
+    { value: 1, from: "poundal", to: "dyne", expected: "13825.5", unit: "dyn" },
+    { value: 1, from: "poundal", to: "pound-force", expected: "0.03108", unit: "lbf" },
+    { value: 1, from: "poundal", to: "kilogram-force", expected: "0.01409", unit: "kgf" },
+    { value: 1, from: "pound-force", to: "newton", expected: "4.4482", unit: "N" },
+    { value: 1, from: "pound-force", to: "kilogram-force", expected: "0.4536", unit: "kgf" },
+    { value: 1, from: "kilogram-force", to: "newton", expected: "9.8066", unit: "N" },
+    { value: 1, from: "kilogram-force", to: "pound-force", expected: "2.2046", unit: "lbf" },
   ];
   const convert = new Conversion({
     decimals: 4,
   });
 
-  forceTests.forEach(({ value, from, to, expected }) => {
+  forceTests.forEach(({ value, from, to, expected, unit }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      expect(convert.value(value).from(from).to(to)).toBe(expected);
+      const result = convert.value(value).from(from).to(to);
+      expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
+      expect(result.unit).toBe(unit)
     });
   });
 });

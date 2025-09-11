@@ -27,7 +27,7 @@ export type EnergyUnits =
   | "kilowatt-hour"
   | "electron-volt";
 export type AngleUnits = "radian" | "degree" | "gradian" | "arcminute" | "arcsecond";
-
+export type ForceUnits = "newton" | "dyne" | "pound-force" | "kilogram-force" | "poundal";
 export type AllUnits =
   | TemperatureUnits
   | LengthUnits
@@ -37,10 +37,8 @@ export type AllUnits =
   | NumberUnits
   | PressureUnits
   | EnergyUnits
-  | AngleUnits;
-export type ForceUnits = "newton" | "dyne" | "pound-force" | "kilogram-force" | "poundal";
-
-export type AllUnits = TemperatureUnits | LengthUnits | WeightUnits | VolumeUnits | TimeUnits | NumberUnits | ForceUnits;
+  | AngleUnits
+  | ForceUnits;
 
 export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
   ? TemperatureUnits

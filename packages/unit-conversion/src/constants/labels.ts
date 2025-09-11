@@ -126,8 +126,6 @@ export const LABELS = {
   "pound-force": "lbf",
   "kilogram-force": "kgf",
 
-
-
   // pressure
   pascal: "Pa",
   kilopascal: "kPa",
