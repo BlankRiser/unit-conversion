@@ -7,8 +7,8 @@ The **weight** category provides conversions between metric units (grams, kilogr
 
 ## Supported Units
 
-- Metric: milligram (mg), gram (g), kilogram (kg), tonne (t)
-- Imperial / US: ounce (oz), pound (lb), stone (st), ton (US ton)
+- Metric: milligram `mg`, gram `g`, kilogram `kg`, tonne `t`
+- Imperial / US: ounce `oz`, pound `lb`, stone `st`, ton `US ton`
 
 ## Quick Example
 
@@ -17,8 +17,8 @@ import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-console.log(convert.value(1000).from("gram").to("kilogram"));    // "1kg"
-console.log(convert.value(1).from("pound").to("kilogram"));      // "0.454kg"
+convert.value(1000).from("gram").to("kilogram");    
+convert.value(1).from("pound").to("kilogram");      
 ```
 
 ## Common Conversions
@@ -26,13 +26,13 @@ console.log(convert.value(1).from("pound").to("kilogram"));      // "0.454kg"
 ### Gram ↔ Kilogram
 
 ```ts
-convert.value(1000).from("gram").to("kilogram");      // "1kg"
-convert.value(1).from("kilogram").to("gram");         // "1000g"
+convert.value(1000).from("gram").to("kilogram");      
+convert.value(1).from("kilogram").to("gram");         
 
 ```
 ### Ounce ↔ Pound
 
 ```ts
-convert.value(16).from("ounce").to("pound");      // "1lb"
-convert.value(1).from("pound").to("ounce");       // "16oz"
+convert.value(16).from("ounce").to("pound");      
+convert.value(1).from("pound").to("ounce");       
 ```

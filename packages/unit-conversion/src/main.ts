@@ -1,10 +1,22 @@
 import { type ConversionConfig, DEFAULT_CONFIG } from "./constants/config";
 import { LABELS } from "./constants/labels";
-import { type AllUnits, NO_UNITS_CATEGORIES, type UnitCategory } from "./constants/units";
+import type { AllUnits, UnitCategory } from "./constants/units";
 import { getUnitCategory } from "./utils/common";
 import { CONVERSION_FACTORS, type ConversionFactor } from "./utils/conversion-factors";
 
-type InputValue = number | string;
+type UnitType = number | string;
+
+/**
+ * Represents the result of a unit conversion.
+ *
+ * @template T - The type of the converted value (number | string)
+ */
+interface ConversionResult<T extends UnitType = UnitType> {
+  /** The converted value */
+  value: T;
+  /** The unit label/abbreviation for the target unit */
+  unit: string;
+}
 
 /**
  * Represents a value with conversion capabilities.
@@ -21,7 +33,7 @@ type InputValue = number | string;
  * const length = new ValueWithFrom(5, config).from('m').to('ft');
  * ```
  */
-class ValueWithFrom<T extends InputValue> {
+class ValueWithFrom<T extends UnitType> {
   constructor(
     private val: T,
     private config: ConversionConfig,
@@ -41,18 +53,18 @@ class ValueWithFrom<T extends InputValue> {
  * @example
  * ```ts
  * // Convert 100 kilometers to miles
- * const distance = new FromUnit(100, 'km', { decimals: 2, includeUnit: true });
- * const inMiles = distance.to('mi'); // Returns "62.14mi"
+ * const distance = new FromUnit(100, 'km', { decimals: 2 });
+ * const inMiles = distance.to('mi'); // Returns { value: 62.14, unit: 'mi' }
  * ```
  */
-class FromUnit<T extends InputValue, F extends AllUnits> {
+class FromUnit<T extends UnitType, F extends AllUnits> {
   constructor(
     private value: T,
     private fromUnit: F,
     private config: ConversionConfig,
   ) {}
 
-  to<U extends UnitCategory<F>>(unit: U): InputValue {
+  to<U extends UnitCategory<F>>(unit: U): ConversionResult {
     const category = getUnitCategory(this.fromUnit);
     const categoryFactors = CONVERSION_FACTORS[category];
 
@@ -66,14 +78,14 @@ class FromUnit<T extends InputValue, F extends AllUnits> {
     // Handle type conversion properly based on input type
     let baseValue: number | string;
     if (typeof this.value === "number") {
-      baseValue = (fromUnitFactors.toBase as (v: number) => InputValue)(this.value);
+      baseValue = (fromUnitFactors.toBase as (v: number) => UnitType)(this.value);
     } else {
       // Convert string to number for calculations
       const numericValue = parseFloat(this.value as string);
       if (Number.isNaN(numericValue)) {
         throw new Error(`Invalid numeric value: ${this.value}`);
       }
-      baseValue = (fromUnitFactors.toBase as (v: number) => InputValue)(numericValue);
+      baseValue = (fromUnitFactors.toBase as (v: number) => UnitType)(numericValue);
     }
 
     // Convert baseValue to number if it's a string for the final conversion
@@ -82,26 +94,22 @@ class FromUnit<T extends InputValue, F extends AllUnits> {
       throw new Error(`Invalid base value after conversion: ${baseValue}`);
     }
 
-    const numericResult = (toUnitFactors.fromBase as (v: number) => InputValue)(baseNumeric);
+    const numericResult = (toUnitFactors.fromBase as (v: number) => UnitType)(baseNumeric);
 
     let finalValue = numericResult;
     if (typeof numericResult === "number") {
       finalValue =
         this.config.isFloat === false
           ? Math.round(numericResult)
-          : Number(numericResult.toFixed(this.config.decimals ?? 2));
+          : Number(numericResult.toFixed(this.config.decimals ?? 20));
     }
 
-    // Return with unit label if includeUnit is true (default)
-    if (this.config.includeUnit !== false) {
-      const unitLabel = LABELS[unit as keyof typeof LABELS] || unit;
-      if (NO_UNITS_CATEGORIES.includes(category.toString())) {
-        return finalValue;
-      }
-      return `${finalValue}${unitLabel}`;
-    }
+    const unitLabel = LABELS[unit as keyof typeof LABELS] || unit;
 
-    return finalValue;
+    return {
+      value: finalValue,
+      unit: unitLabel,
+    };
   }
 }
 

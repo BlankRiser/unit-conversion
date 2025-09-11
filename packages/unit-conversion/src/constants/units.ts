@@ -2,7 +2,6 @@ export type TemperatureUnits = "celsius" | "fahrenheit" | "kelvin";
 
 export type LengthUnits = "meter" | "kilometer" | "centimeter" | "millimeter" | "inch" | "foot" | "yard" | "mile";
 export type WeightUnits = "milligram" | "gram" | "kilogram" | "pound" | "ounce" | "ton";
-
 export type VolumeUnits =
   | "liter"
   | "milliliter"
@@ -15,11 +14,30 @@ export type VolumeUnits =
   | "cubic-meter"
   | "cubic-foot"
   | "cubic-inch";
-
 export type TimeUnits = "millisecond" | "second" | "minute" | "hour" | "day" | "week" | "month" | "year";
-
 export type NumberUnits = "binary" | "decimal" | "hexadecimal" | "base8";
+export type PressureUnits = "pascal" | "kilopascal" | "bar" | "psi" | "atmosphere";
+export type EnergyUnits =
+  | "joule"
+  | "kilojoule"
+  | "calorie"
+  | "calorie-international-table"
+  | "calorie-thermochemical"
+  | "watt-hour"
+  | "kilowatt-hour"
+  | "electron-volt";
+export type AngleUnits = "radian" | "degree" | "gradian" | "arcminute" | "arcsecond";
 
+export type AllUnits =
+  | TemperatureUnits
+  | LengthUnits
+  | WeightUnits
+  | VolumeUnits
+  | TimeUnits
+  | NumberUnits
+  | PressureUnits
+  | EnergyUnits
+  | AngleUnits;
 export type ForceUnits = "newton" | "dyne" | "pound-force" | "kilogram-force" | "poundal";
 
 export type AllUnits = TemperatureUnits | LengthUnits | WeightUnits | VolumeUnits | TimeUnits | NumberUnits | ForceUnits;
@@ -38,7 +56,13 @@ export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
             ? NumberUnits
             : T extends ForceUnits
               ? ForceUnits
-              : never;
+              : T extends PressureUnits
+                ? PressureUnits
+                : T extends EnergyUnits
+                  ? EnergyUnits
+                  : T extends AngleUnits
+                    ? AngleUnits
+                    : never;
 
 export type ALL_UNIT_CATEGORIES = {
   temperature: TemperatureUnits[];
@@ -47,6 +71,9 @@ export type ALL_UNIT_CATEGORIES = {
   volume: VolumeUnits[];
   time: TimeUnits[];
   number: NumberUnits[];
+  pressure: PressureUnits[];
+  energy: EnergyUnits[];
+  angle: AngleUnits[];
   force: ForceUnits[];
 };
 
@@ -56,11 +83,15 @@ export type ALL_UNIT_CATEGORIES = {
  * @description
  * This module exports a collection of units organized by measurement category.
  *
- * @property {string[]} temperature - Units for temperature measurements (celsius, fahrenheit, kelvin)
- * @property {string[]} length - Units for length measurements (meter, kilometer, centimeter, millimeter, inch, foot, yard, mile)
- * @property {string[]} weight - Units for weight measurements (gram, kilogram, pound, ounce, ton)
- * @property {string[]} volume - Units for volume measurements (liter, milliliter, gallon, quart, pint, cup, fluid-ounce)
- * @property {string[]} time - Units for time measurements (second, minute, hour, day, week, month, year)
+ * @property {string[]} temperature - Units for temperature measurements. Base unit is kelvin
+ * @property {string[]} length - Units for length measurements. Base unit is meter
+ * @property {string[]} weight - Units for weight measurements. Base unit is gram
+ * @property {string[]} volume - Units for volume measurements. Base unit is liter
+ * @property {string[]} time - Units for time measurements. Base unit is second
+ * @property {string[]} number - Units for number measurements. Base unit is base-10
+ * @property {string[]} pressure - Units for pressure measurements. Base unit is pascal
+ * @property {string[]} energy - Units for energy measurements. Base unit is joule
+ * @property {string[]} angle - Units for angle measurements. Base unit is radian
  */
 export const UNITS: ALL_UNIT_CATEGORIES = {
   temperature: ["celsius", "fahrenheit", "kelvin"],
@@ -81,6 +112,18 @@ export const UNITS: ALL_UNIT_CATEGORIES = {
   ],
   time: ["millisecond", "second", "minute", "hour", "day", "week", "month", "year"],
   number: ["decimal", "binary", "hexadecimal", "base8"],
+  pressure: ["pascal", "kilopascal", "bar", "psi", "atmosphere"],
+  energy: [
+    "joule",
+    "kilojoule",
+    "calorie",
+    "calorie-international-table",
+    "calorie-thermochemical",
+    "watt-hour",
+    "kilowatt-hour",
+    "electron-volt",
+  ],
+  angle: ["degree", "radian", "gradian", "arcminute", "arcsecond"],
   force: ["newton", "dyne", "pound-force", "kilogram-force", "poundal"],
 };
 
