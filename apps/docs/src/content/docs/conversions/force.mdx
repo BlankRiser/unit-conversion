@@ -1,0 +1,38 @@
+---
+title: "Force"
+template: doc
+---
+
+The **force** category supports conversions between Newton, Dyne, Poundal, Pound-Force, and Kilogram-Force.
+
+## Supported Units
+
+- Newton `N`
+- Dyne `dyn`
+- Poundal `pdl`
+- Pound-Force `lbf`
+- Kilogram-Force `kgf`
+
+## Quick Example
+
+```ts
+import { Conversion } from "@devhaven/unit-conversion";
+
+const convert = new Conversion();
+
+convert.value(10).from("newton").to("dyne");
+convert.value(5000).from("dyne").to("newton");
+```
+
+## Common Conversions
+### Newton ↔ Kilogram-Force
+```ts
+convert.value(1).from("newton").to("kilogram-force");
+convert.value(1).from("kilogram-force").to("newton");
+```
+
+### Newton ↔ Pound-Force
+```ts
+convert.value(1).from("newton").to("pound-force");
+convert.value(1).from("pound-force").to("newton");
+```
