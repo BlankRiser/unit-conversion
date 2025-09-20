@@ -501,7 +501,7 @@ describe("Test force conversions", () => {
     test(`Converts ${value} ${from} to ${to}`, () => {
       const result = convert.value(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
-      expect(result.unit).toBe(unit)
+      expect(result.unit).toBe(unit);
     });
   });
 });
