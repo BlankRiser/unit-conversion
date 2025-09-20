@@ -413,6 +413,4 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
       fromBase: (v: number) => v * 0.1019716213,
     },
   },
-
-
 };

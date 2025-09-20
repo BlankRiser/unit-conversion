@@ -3,6 +3,7 @@ export { LABELS } from "./constants/labels";
 export type {
   ALL_UNIT_CATEGORIES,
   AllUnits,
+  ForceUnits,
   LengthUnits,
   NumberUnits,
   TemperatureUnits,
@@ -10,7 +11,6 @@ export type {
   UnitCategory,
   VolumeUnits,
   WeightUnits,
-  ForceUnits
 } from "./constants/units";
 export { UNITS } from "./constants/units";
 export { Conversion } from "./main";
