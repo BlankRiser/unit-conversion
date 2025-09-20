@@ -30,6 +30,7 @@ export function getUnitCategory(unit: AllUnits): keyof typeof CONVERSION_FACTORS
   if (isUnitInCategory(unit, "pressure")) return "pressure";
   if (isUnitInCategory(unit, "energy")) return "energy";
   if (isUnitInCategory(unit, "angle")) return "angle";
+  if (isUnitInCategory(unit, "force")) return "force";
 
   throw new Error(`Unknown unit: ${unit}`);
 }

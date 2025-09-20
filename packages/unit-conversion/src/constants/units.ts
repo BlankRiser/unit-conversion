@@ -27,7 +27,7 @@ export type EnergyUnits =
   | "kilowatt-hour"
   | "electron-volt";
 export type AngleUnits = "radian" | "degree" | "gradian" | "arcminute" | "arcsecond";
-
+export type ForceUnits = "newton" | "dyne" | "pound-force" | "kilogram-force" | "poundal";
 export type AllUnits =
   | TemperatureUnits
   | LengthUnits
@@ -37,7 +37,8 @@ export type AllUnits =
   | NumberUnits
   | PressureUnits
   | EnergyUnits
-  | AngleUnits;
+  | AngleUnits
+  | ForceUnits;
 
 export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
   ? TemperatureUnits
@@ -51,13 +52,15 @@ export type UnitCategory<T extends AllUnits> = T extends TemperatureUnits
           ? TimeUnits
           : T extends NumberUnits
             ? NumberUnits
-            : T extends PressureUnits
-              ? PressureUnits
-              : T extends EnergyUnits
-                ? EnergyUnits
-                : T extends AngleUnits
-                  ? AngleUnits
-                  : never;
+            : T extends ForceUnits
+              ? ForceUnits
+              : T extends PressureUnits
+                ? PressureUnits
+                : T extends EnergyUnits
+                  ? EnergyUnits
+                  : T extends AngleUnits
+                    ? AngleUnits
+                    : never;
 
 export type ALL_UNIT_CATEGORIES = {
   temperature: TemperatureUnits[];
@@ -69,6 +72,7 @@ export type ALL_UNIT_CATEGORIES = {
   pressure: PressureUnits[];
   energy: EnergyUnits[];
   angle: AngleUnits[];
+  force: ForceUnits[];
 };
 
 /**
@@ -118,6 +122,7 @@ export const UNITS: ALL_UNIT_CATEGORIES = {
     "electron-volt",
   ],
   angle: ["degree", "radian", "gradian", "arcminute", "arcsecond"],
+  force: ["newton", "dyne", "pound-force", "kilogram-force", "poundal"],
 };
 
 export const NO_UNITS_CATEGORIES = ["number"];

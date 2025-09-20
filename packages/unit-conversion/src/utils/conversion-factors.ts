@@ -51,6 +51,7 @@ interface ConversionFactorGroups {
  * @property {Object} weight - Weight conversions with gram as base unit
  * @property {Object} volume - Volume conversions with liter as base unit
  * @property {Object} time - Time conversions with second as base unit
+ * @property {Object} force - Force conversions with Newton as base unit
  */
 export const CONVERSION_FACTORS: ConversionFactorGroups = {
   // Temperature (base: Kelvin)
@@ -387,4 +388,29 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
     },
   },
   // Angle (base: radian)
+
+  // Force (base: newton)
+  force: {
+    newton: {
+      isBaseUnit: true,
+      toBase: (v: number) => v,
+      fromBase: (v: number) => v,
+    },
+    dyne: {
+      toBase: (v: number) => v * 1e-5,
+      fromBase: (v: number) => v / 1e-5,
+    },
+    poundal: {
+      toBase: (v: number) => v * 0.138255,
+      fromBase: (v: number) => v / 0.138255,
+    },
+    "pound-force": {
+      toBase: (v: number) => v * 4.44822,
+      fromBase: (v: number) => v / 4.44822,
+    },
+    "kilogram-force": {
+      toBase: (v: number) => v / 0.1019716213,
+      fromBase: (v: number) => v * 0.1019716213,
+    },
+  },
 };

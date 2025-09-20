@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
-import type { AllUnits } from "../src";
-import { Conversion } from "../src/main";
+import { type AllUnits, Conversion } from "../src";
 
 type TestValues = {
   value: number;
@@ -467,6 +466,38 @@ describe("Test energy conversions", () => {
   const convert = new Conversion();
 
   pressureTests.forEach(({ value, from, to, expected, unit }) => {
+    test(`Converts ${value} ${from} to ${to}`, () => {
+      const result = convert.value(value).from(from).to(to);
+      expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
+      expect(result.unit).toBe(unit);
+    });
+  });
+});
+
+describe("Test force conversions", () => {
+  const forceTests: Array<TestValues> = [
+    { value: 1, from: "newton", to: "pound-force", expected: "0.2248", unit: "lbf" },
+    { value: 1, from: "newton", to: "kilogram-force", expected: "0.1019", unit: "kgf" },
+    { value: 1, from: "newton", to: "dyne", expected: "100000", unit: "dyn" },
+    { value: 1, from: "newton", to: "poundal", expected: "7.2330", unit: "pdl" },
+    { value: 1, from: "dyne", to: "newton", expected: "0.00001", unit: "N" },
+    { value: 1, from: "dyne", to: "pound-force", expected: "0", unit: "lbf" },
+    { value: 1, from: "dyne", to: "kilogram-force", expected: "0", unit: "kgf" },
+    { value: 1, from: "dyne", to: "poundal", expected: "0.00001", unit: "pdl" },
+    { value: 1, from: "poundal", to: "newton", expected: "0.1383", unit: "N" },
+    { value: 1, from: "poundal", to: "dyne", expected: "13825.5", unit: "dyn" },
+    { value: 1, from: "poundal", to: "pound-force", expected: "0.03108", unit: "lbf" },
+    { value: 1, from: "poundal", to: "kilogram-force", expected: "0.01409", unit: "kgf" },
+    { value: 1, from: "pound-force", to: "newton", expected: "4.4482", unit: "N" },
+    { value: 1, from: "pound-force", to: "kilogram-force", expected: "0.4536", unit: "kgf" },
+    { value: 1, from: "kilogram-force", to: "newton", expected: "9.8066", unit: "N" },
+    { value: 1, from: "kilogram-force", to: "pound-force", expected: "2.2046", unit: "lbf" },
+  ];
+  const convert = new Conversion({
+    decimals: 4,
+  });
+
+  forceTests.forEach(({ value, from, to, expected, unit }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
       const result = convert.value(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
