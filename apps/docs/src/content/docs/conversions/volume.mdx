@@ -15,8 +15,8 @@ import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-convert.value(1000).from("milliliter").to("liter"); 
-convert.value(1).from("gallon").to("liter"); 
+convert(1000).from("milliliter").to("liter"); 
+convert(1).from("gallon").to("liter"); 
 
 ```
 
@@ -24,18 +24,18 @@ convert.value(1).from("gallon").to("liter");
 
 ### Liter ↔ Milliliter
 ```ts
-convert.value(1).from("liter").to("milliliter");      
-convert.value(1).from("milliliter").to("liter");      
+convert(1).from("liter").to("milliliter");      
+convert(1).from("milliliter").to("liter");      
 ```
 
 ### Liter ↔ Cubic Meter
 ```ts
-convert.value(1).from("liter").to("cubic-meter");      
-convert.value(1).from("cubic-meter").to("liter");      
+convert(1).from("liter").to("cubic-meter");      
+convert(1).from("cubic-meter").to("liter");      
 ```
 
 ### Cup (US) ↔ Milliliter
 ```ts
-convert.value(1).from("us-legal-cup").to("milliliter");      
-convert.value(1).from("milliliter").to("us-legal-cup");      
+convert(1).from("us-legal-cup").to("milliliter");      
+convert(1).from("milliliter").to("us-legal-cup");      
 ```

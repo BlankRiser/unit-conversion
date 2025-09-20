@@ -19,8 +19,8 @@ import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-convert.value(60000).from("millisecond").to("minute");      
-convert.value(2).from("hour").to("minute");                 
+convert(60000).from("millisecond").to("minute");      
+convert(2).from("hour").to("minute");                 
 ```
 
 ## Common Conversions
@@ -28,20 +28,20 @@ convert.value(2).from("hour").to("minute");
 ### Day ↔ Hour
 
 ```ts
-convert.value(1).from("day").to("hour");        
-convert.value(24).from("hour").to("day");       
+convert(1).from("day").to("hour");        
+convert(24).from("hour").to("day");       
 ```
 
 ### Second ↔ Hour
 
 ```ts
-convert.value(3600).from("second").to("hour");      
-convert.value(1).from("hour").to("second");         
+convert(3600).from("second").to("hour");      
+convert(1).from("hour").to("second");         
 ```
 
 ### Millisecond ↔ Second
 
 ```ts
-convert.value(1000).from("millisecond").to("second");      
-convert.value(1).from("second").to("millisecond");         
+convert(1000).from("millisecond").to("second");      
+convert(1).from("second").to("millisecond");         
 ```

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { type AllUnits, Conversion } from "../src";
+import { isApproximatelyEqual } from "./test-utils";
 
 type TestValues = {
   value: number;
@@ -8,84 +9,6 @@ type TestValues = {
   expected: number | string;
   unit?: string;
 };
-
-/**
- * Determines if two numbers are approximately equal within a relative tolerance.
- *
- * @param a - First number to compare
- * @param b - Second number to compare
- * @param relativeTolerance - Relative tolerance for comparison (default: 1e-2 or 1%)
- * @returns Boolean indicating if the numbers are approximately equal
- *
- * @remarks
- * This function uses relative tolerance rather than absolute difference, making it suitable
- * for comparing numbers of different magnitudes. The comparison is considered valid when:
- * |a - b| ≤ max(|a|, |b|, 1) × relativeTolerance
- *
- * @example
- * // Returns true (within 1% tolerance)
- * isApproximatelyEqual(100, 101);
- *
- * @example
- * // Using custom tolerance (0.1%)
- * isApproximatelyEqual(100, 100.05, 0.001); // true
- */
-function isApproximatelyEqual(a: number, b: number, relativeTolerance: number = 1e-2): boolean {
-  const diff = Math.abs(a - b);
-  const largest = Math.max(Math.abs(a), Math.abs(b), 1);
-  return diff <= largest * relativeTolerance;
-}
-
-test("Check conversion config", () => {
-  const withFloat = new Conversion({
-    isFloat: true,
-  });
-
-  const resultWithFloat = withFloat.value(12).from("celsius").to("kelvin");
-
-  const withoutFloat = new Conversion({
-    isFloat: false,
-  });
-
-  const resultWithoutFloat = withoutFloat.value(12).from("celsius").to("kelvin");
-
-  expect(isApproximatelyEqual(+resultWithFloat.value, 285)).toBe(true);
-  expect(isApproximatelyEqual(+resultWithoutFloat.value, 285)).toBe(true);
-});
-
-describe("Check locale", () => {
-  const locales = [
-    { locale: "en-US", value: 1234567.89, name: "English (US)", expected: "1,234,567.89" },
-    { locale: "en-GB", value: 1234567.89, name: "English (UK)", expected: "1,234,567.89" },
-    { locale: "de-DE", value: 1234567.89, name: "German (Germany)", expected: "1.234.567,89" },
-    {
-      locale: "fr-FR",
-      value: 1234567.89,
-      name: "French (France)",
-      expected: "1\u202f234\u202f567,89", // same as "1 234 567,89"
-      // NB: \u202f is a narrow no-break space so that the test works consistently across environments
-    },
-    { locale: "hi-IN", value: 1234567.89, name: "Hindi (India)", expected: "12,34,567.89" },
-    { locale: "ar-EG", value: 1234567.89, name: "Arabic (Egypt)", expected: "١٬٢٣٤٬٥٦٧٫٨٩" },
-    {
-      locale: "ru-RU",
-      value: 1234567.89,
-      name: "Russian (Russia)",
-      expected: "1\u00a0234\u00a0567,89", // same as "1 234 567,89"
-      // NB: \u00a0 is a no-break space so that the test works consistently across environments
-    },
-    { locale: "ja-JP", value: 1234567.89, name: "Japanese (Japan)", expected: "1,234,567.89" },
-    { locale: "zh-CN", value: 1234567.89, name: "Chinese (China)", expected: "1,234,567.89" },
-    { locale: "pt-BR", value: 1234567.89, name: "Portuguese (Brazil)", expected: "1.234.567,89" },
-  ];
-
-  locales.forEach(({ locale, value, expected }) => {
-    test(`Get locale ${value} as ${locale}: ${expected}`, () => {
-      const result = new Conversion({ locale }).value(1234567.89).from("decimal").to("decimal");
-      expect(result.value).equal(expected);
-    });
-  });
-});
 
 describe("Test Length conversions", () => {
   const lengthTests: Array<TestValues> = [
@@ -129,7 +52,7 @@ describe("Test Length conversions", () => {
 
   lengthTests.forEach(({ value, from, to, expected }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       // expect(+result.value).toBe(+expected);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
     });
@@ -149,7 +72,7 @@ describe("Test temperature conversions", () => {
 
   temperatureTests.forEach(({ value, from, to, expected }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
     });
   });
@@ -185,7 +108,7 @@ describe("Test weight conversions", () => {
 
   weightTests.forEach(({ value, from, to, expected }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
     });
   });
@@ -230,7 +153,7 @@ describe("Test time conversions", () => {
 
   timeTests.forEach(({ value, from, to, expected }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
     });
   });
@@ -335,7 +258,7 @@ describe("Test volumes conversions", () => {
 
   volumeTests.forEach(({ value, from, to, expected }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
     });
   });
@@ -360,7 +283,7 @@ describe("Test number conversions", () => {
 
   numberTests.forEach(({ value, from, to, expected }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       expect(result.value).toBe(expected);
     });
   });
@@ -393,7 +316,7 @@ describe("Test pressure conversions", () => {
 
   pressureTests.forEach(({ value, from, to, expected, unit }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
       expect(result.unit).toBe(unit);
     });
@@ -501,7 +424,7 @@ describe("Test energy conversions", () => {
 
   pressureTests.forEach(({ value, from, to, expected, unit }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
       expect(result.unit).toBe(unit);
     });
@@ -533,7 +456,7 @@ describe("Test force conversions", () => {
 
   forceTests.forEach(({ value, from, to, expected, unit }) => {
     test(`Converts ${value} ${from} to ${to}`, () => {
-      const result = convert.value(value).from(from).to(to);
+      const result = convert(value).from(from).to(to);
       expect(isApproximatelyEqual(+result.value, +expected)).toBe(true);
       expect(result.unit).toBe(unit);
     });

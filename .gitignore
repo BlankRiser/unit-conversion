@@ -171,5 +171,8 @@ dist
 # IntelliJ based IDEs
 .idea
 
+# kiro
+.kiro
+
 # Finder (MacOS) folder config
 .DS_Store

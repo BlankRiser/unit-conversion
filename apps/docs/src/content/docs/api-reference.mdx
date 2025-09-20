@@ -8,6 +8,8 @@ title: "API Reference"
 import { Conversion } from "@devhaven/unit-conversion";
 
 const conversion = new Conversion();
+const result = conversion(10).from("meter").to("foot");
+// or you can also call it like this
 const result = conversion.value(10).from("meter").to("foot");
 ```
 
@@ -23,7 +25,7 @@ const result = conversion.value(10).from("meter").to("foot");
 import { Conversion } from "@devhaven/unit-conversion";
 
 const conversion = new Conversion({ decimals: 4 });
-const result = conversion.value(10).from("meter").to("foot");
+const result = conversion(10).from("meter").to("foot");
 ```
 
 ##### isFloat?: boolean
@@ -36,6 +38,30 @@ const result = conversion.value(10).from("meter").to("foot");
 import { Conversion } from "@devhaven/unit-conversion";
 
 const conversion = new Conversion({ isFloat: true });
-const result = conversion.value(10).from("meter").to("foot");
+const result = conversion(10).from("meter").to("foot");
+```
+##### locale?: string
+
+- Optional
+- Default: undefined
+- If provided, the conversion result will be formatted according to the specified locale.
+
+```ts
+import { Conversion } from "@devhaven/unit-conversion";
+
+const conversion = new Conversion({ locale: "hi-IN" });
+const result = conversion(10).from("meter").to("foot");
+```
+##### isFloat?: boolean
+
+- Optional
+- Default: false
+- If true, the conversion result will be a floating-point number.
+
+```ts
+import { Conversion } from "@devhaven/unit-conversion";
+
+const conversion = new Conversion({ isFloat: true });
+const result = conversion(10).from("meter").to("foot");
 ```
 

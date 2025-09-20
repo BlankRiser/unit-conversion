@@ -18,8 +18,8 @@ import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-convert.value(0).from("celsius").to("fahrenheit");      
-convert.value(212).from("fahrenheit").to("celsius");    
+convert(0).from("celsius").to("fahrenheit");      
+convert(212).from("fahrenheit").to("celsius");    
 ```
 
 ## Common Conversions
@@ -27,12 +27,12 @@ convert.value(212).from("fahrenheit").to("celsius");
 
 ### Celsius ↔ Kelvin
 ```ts
-convert.value(100).from("celsius").to("kelvin");    
-convert.value(0).from("kelvin").to("celsius");      
+convert(100).from("celsius").to("kelvin");    
+convert(0).from("kelvin").to("celsius");      
 ```
 
 ### Celsius ↔ Fahrenheit
 ```ts
-convert.value(100).from("celsius").to("fahrenheit");     
-convert.value(32).from("fahrenheit").to("celsius");      
+convert(100).from("celsius").to("fahrenheit");     
+convert(32).from("fahrenheit").to("celsius");      
 ```

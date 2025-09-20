@@ -39,5 +39,5 @@ deno add jsr:@devhaven/unit-conversion
 import { Conversion } from "@devhaven/unit-conversion"
 
 const conversion = new Conversion();
-const { value, unit } = conversion.value(10).from("meter").to("foot");
+const { value, unit } = conversion(10).from("meter").to("foot");
 ```

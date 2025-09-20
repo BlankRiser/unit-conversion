@@ -118,28 +118,59 @@ class FromUnit<T extends UnitType, F extends AllUnits> {
 }
 
 /**
+ * Creates a callable conversion function with the value method attached
+ */
+function createConversion(config: ConversionConfig = DEFAULT_CONFIG): CallableConversion {
+  const finalConfig = {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
+
+  const callable = <T extends UnitType>(val: T): ValueWithFrom<T> => {
+    return new ValueWithFrom(val, finalConfig);
+  };
+
+  callable.value = <T extends UnitType>(val: T): ValueWithFrom<T> => {
+    return new ValueWithFrom(val, finalConfig);
+  };
+
+  return callable;
+}
+
+/**
+ * Interface for the callable functionality
+ */
+type CallableFunction = <T extends UnitType>(val: T) => ValueWithFrom<T>;
+
+/**
+ * Type that combines the class methods with callable functionality
+ */
+type CallableConversion = CallableFunction & {
+  value<T extends UnitType>(val: T): ValueWithFrom<T>;
+};
+
+/**
  * Represents a utility class for unit conversions.
  *
  * The Conversion class provides a fluent API for converting values between different units.
  * It allows customization through configuration options passed to the constructor.
+ * The class instance is callable directly, providing a more concise API.
  *
  * @example
  * ```ts
  * const conversion = new Conversion();
- * const result = conversion.value(5).from('meters').to('feet');
+ * // Using the callable API
+ * const result1 = conversion(5).from('meters').to('feet');
+ * // Using the traditional `.value()` method (backward compatible)
+ * const result2 = conversion.value(5).from('meters').to('feet');
  * ```
  */
-export class Conversion {
-  private config: ConversionConfig;
-
-  constructor(config: ConversionConfig = DEFAULT_CONFIG) {
-    this.config = {
-      ...DEFAULT_CONFIG,
-      ...config,
-    };
-  }
-
-  value<T extends number>(val: T): ValueWithFrom<T> {
-    return new ValueWithFrom(val, this.config);
-  }
+export interface ConversionConstructor {
+  new (config?: ConversionConfig): CallableConversion;
 }
+
+export const Conversion: ConversionConstructor = class ConversionImpl {
+  constructor(config: ConversionConfig = DEFAULT_CONFIG) {
+    return createConversion(config);
+  }
+} as ConversionConstructor;

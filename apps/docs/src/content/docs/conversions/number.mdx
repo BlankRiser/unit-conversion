@@ -19,26 +19,26 @@ import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-convert.value(255).from("decimal").to("hexadecimal")
-convert.value(1010).from("binary").to("decimal")
+convert(255).from("decimal").to("hexadecimal")
+convert(1010).from("binary").to("decimal")
 ```
 
 ## Common Conversions
 
 ### Binary ↔ Decimal
 ```ts
-convert.value(10).from("decimal").to("binary");      
-convert.value(10).from("binary").to("decimal");      
+convert(10).from("decimal").to("binary");      
+convert(10).from("binary").to("decimal");      
 ```
 
 ### Decimal ↔ Hexadecimal
 ```ts
-convert.value("a").from("hexadecimal").to("decimal");     
-convert.value(15).from("decimal").to("hexadecimal");      
+convert("a").from("hexadecimal").to("decimal");     
+convert(15).from("decimal").to("hexadecimal");      
 ```
 
 ### Octal ↔ Decimal
 ```ts
-convert.value(77).from("octal").to("decimal");      
-convert.value(77).from("decimal").to("octal");      
+convert(77).from("octal").to("decimal");      
+convert(77).from("decimal").to("octal");      
 ```

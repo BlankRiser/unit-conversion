@@ -20,26 +20,26 @@ import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-convert.value(100).from("pascal").to("kilopascal");      
-convert.value(1).from("kilopascal").to("pascal");    
+convert(100).from("pascal").to("kilopascal");      
+convert(1).from("kilopascal").to("pascal");    
 ```
 
 ## Common Conversions
 
 ### Pascal ↔ Bar
 ```ts
-convert.value(1).from("pascal").to("bar");    
-convert.value(1).from("bar").to("pascal");      
+convert(1).from("pascal").to("bar");    
+convert(1).from("bar").to("pascal");      
 ```
 
 ### Kilopascal ↔ PSI
 ```ts
-convert.value(1).from("kilopascal").to("psi");     
-convert.value(1).from("psi").to("kilopascal");      
+convert(1).from("kilopascal").to("psi");     
+convert(1).from("psi").to("kilopascal");      
 ```
 
 ### Bar ↔ PSI
 ```ts
-convert.value(1).from("bar").to("psi");     
-convert.value(1).from("psi").to("bar");      
+convert(1).from("bar").to("psi");     
+convert(1).from("psi").to("bar");      
 ```
