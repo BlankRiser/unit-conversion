@@ -14,7 +14,7 @@ This category is useful for engineering, construction, design, or any domain whe
 
 ## Quick Example
 
-```ts twoslash
+```ts
 import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
@@ -32,7 +32,7 @@ console.log(convert.value(1).from("inch").to("centimeter"));
 
 All conversions are approximate to the configured decimal precision.
 
-```ts twoslash
+```ts
 import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion({ includeUnit: false });
@@ -80,7 +80,7 @@ convert.value(50).from("meter").to("yard");
 
 Conversions can be customized with global config values when creating a Conversion instance.
 
-```ts twoslash
+```ts
 import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion({
