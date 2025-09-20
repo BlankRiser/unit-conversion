@@ -104,6 +104,10 @@ class FromUnit<T extends UnitType, F extends AllUnits> {
           : Number(numericResult.toFixed(this.config.decimals ?? 20));
     }
 
+    if (this.config.locale && typeof finalValue === "number") {
+      finalValue = finalValue.toLocaleString(this.config.locale);
+    }
+
     const unitLabel = LABELS[unit as keyof typeof LABELS] || unit;
 
     return {

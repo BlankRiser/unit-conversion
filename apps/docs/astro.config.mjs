@@ -14,13 +14,6 @@ export default defineConfig({
       },
       social: [{ icon: "github", label: "GitHub", href: "https://github.com/BlankRiser/unit-conversion" }],
       sidebar: [
-        // {
-        //   label: "Guides",
-        //   items: [
-        //     // Each item here is one entry in the navigation menu.
-        //     { label: "Example Guide", slug: "guides/example" },
-        //   ],
-        // },
         {
           label: "Overview",
           slug: "index",

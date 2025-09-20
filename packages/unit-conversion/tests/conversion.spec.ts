@@ -53,6 +53,40 @@ test("Check conversion config", () => {
   expect(isApproximatelyEqual(+resultWithoutFloat.value, 285)).toBe(true);
 });
 
+describe("Check locale", () => {
+  const locales = [
+    { locale: "en-US", value: 1234567.89, name: "English (US)", expected: "1,234,567.89" },
+    { locale: "en-GB", value: 1234567.89, name: "English (UK)", expected: "1,234,567.89" },
+    { locale: "de-DE", value: 1234567.89, name: "German (Germany)", expected: "1.234.567,89" },
+    {
+      locale: "fr-FR",
+      value: 1234567.89,
+      name: "French (France)",
+      expected: "1\u202f234\u202f567,89", // same as "1 234 567,89"
+      // NB: \u202f is a narrow no-break space so that the test works consistently across environments
+    },
+    { locale: "hi-IN", value: 1234567.89, name: "Hindi (India)", expected: "12,34,567.89" },
+    { locale: "ar-EG", value: 1234567.89, name: "Arabic (Egypt)", expected: "١٬٢٣٤٬٥٦٧٫٨٩" },
+    {
+      locale: "ru-RU",
+      value: 1234567.89,
+      name: "Russian (Russia)",
+      expected: "1\u00a0234\u00a0567,89", // same as "1 234 567,89"
+      // NB: \u00a0 is a no-break space so that the test works consistently across environments
+    },
+    { locale: "ja-JP", value: 1234567.89, name: "Japanese (Japan)", expected: "1,234,567.89" },
+    { locale: "zh-CN", value: 1234567.89, name: "Chinese (China)", expected: "1,234,567.89" },
+    { locale: "pt-BR", value: 1234567.89, name: "Portuguese (Brazil)", expected: "1.234.567,89" },
+  ];
+
+  locales.forEach(({ locale, value, expected }) => {
+    test(`Get locale ${value} as ${locale}: ${expected}`, () => {
+      const result = new Conversion({ locale }).value(1234567.89).from("decimal").to("decimal");
+      expect(result.value).equal(expected);
+    });
+  });
+});
+
 describe("Test Length conversions", () => {
   const lengthTests: Array<TestValues> = [
     { value: 1, from: "meter", to: "millimeter", expected: 1000, unit: "mm" },
