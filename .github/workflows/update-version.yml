@@ -47,6 +47,7 @@ jobs:
         with:
           ref: ${{ steps.meta.outputs.branch }}
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
