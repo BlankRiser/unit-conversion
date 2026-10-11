@@ -1,6 +1,7 @@
+import { fileURLToPath } from "node:url";
 import starlight from "@astrojs/starlight";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
-
 import starlightThemeRapide from "starlight-theme-rapide";
 
 // https://astro.build/config
@@ -27,10 +28,28 @@ export default defineConfig({
           slug: "api-reference",
         },
         {
+          label: "Playground",
+          slug: "playground",
+        },
+        {
           label: "Conversions",
           autogenerate: { directory: "conversions" },
         },
       ],
     }),
   ],
+
+  vite: {
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ["@devhaven/unit-conversion"],
+    },
+    resolve: {
+      alias: {
+        "@devhaven/unit-conversion": fileURLToPath(
+          new URL("../../packages/unit-conversion/src/index.ts", import.meta.url),
+        ),
+      },
+    },
+  },
 });
