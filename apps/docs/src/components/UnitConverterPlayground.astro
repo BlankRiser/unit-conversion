@@ -77,74 +77,126 @@ const locales = [
 ---
 
 <div
-  class="uc-playground not-content"
+  class="uc-playground not-content my-4 mb-8 flex flex-col gap-6 font-[var(--sl-font)] text-[var(--sl-color-text)]"
   data-categories={JSON.stringify(categories)}
 >
-  <!-- Category Selector Tabs -->
-  <div class="uc-section">
-    <div class="uc-section-header">
-      <span class="uc-section-label">1. Select Category</span>
-      <span class="uc-category-desc" id="uc-category-desc"
-        >{categories[0]?.description}</span
+  <!-- 1. Category Selector Tabs -->
+  <div
+    class="rounded-lg border border-[var(--sl-rapide-ui-border-color,var(--sl-color-gray-5))] bg-[var(--sl-rapide-ui-bg-color,var(--sl-color-gray-7))] p-5"
+  >
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+      <span
+        class="text-xs font-semibold tracking-wider text-[var(--sl-color-accent-high)] uppercase"
       >
+        1. Select Category
+      </span>
+      <span class="text-xs text-[var(--sl-color-gray-3)]" id="uc-category-desc">
+        {categories[0]?.description}
+      </span>
     </div>
-    <div class="uc-category-tabs" role="tablist" aria-label="Unit Categories">
+    <div
+      class="flex flex-wrap gap-2"
+      role="tablist"
+      aria-label="Unit Categories"
+    >
       {
         categories.map((cat, idx) => (
           <button
             type="button"
             role="tab"
-            class:list={["uc-tab", { active: idx === 0 }]}
+            class:list={[
+              "uc-tab inline-flex cursor-pointer items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-150",
+              idx === 0
+                ? "border-(--sl-color-green,var(--sl-color-accent)) bg-(--sl-color-green-low,var(--sl-color-accent-low)) text-(--sl-color-green-high,var(--sl-color-accent-high))"
+                : "border-(--sl-color-gray-5) bg-(--sl-color-black) text-(--sl-color-gray-2) hover:border-(--sl-color-gray-3) hover:text-(--sl-color-white)",
+            ]}
             aria-selected={idx === 0 ? "true" : "false"}
             data-category={cat.id}
           >
-            <span class="uc-tab-name">{cat.label}</span>
-            <span class="uc-tab-count">{cat.units.length}</span>
+            <span>{cat.label}</span>
+            <span
+              class:list={[
+                "uc-tab-count rounded-full px-1.5 py-0.5 text-[0.7rem] tabular-nums",
+                idx === 0
+                  ? "bg-(--sl-color-black) text-(--sl-color-green-high,var(--sl-color-accent-high))"
+                  : "bg-(--sl-color-gray-6) text-(--sl-color-gray-3)",
+              ]}
+            >
+              {cat.units.length}
+            </span>
           </button>
         ))
       }
     </div>
   </div>
 
-  <!-- Main Conversion Controls -->
-  <div class="uc-converter-grid">
-    <div class="uc-panel uc-inputs-panel">
-      <div class="uc-panel-header">
-        <span class="uc-section-label">2. Conversion Input</span>
+  <!-- Stacked Conversion Input & Configuration Options -->
+  <div class="flex flex-col gap-6">
+    <!-- 2. Conversion Input -->
+    <div
+      class="flex flex-col gap-4 rounded-lg border border-[var(--sl-rapide-ui-border-color,var(--sl-color-gray-5))] bg-[var(--sl-rapide-ui-bg-color,var(--sl-color-gray-7))] p-5"
+    >
+      <div class="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <span
+          class="text-xs font-semibold tracking-wider text-[var(--sl-color-accent-high)] uppercase"
+        >
+          2. Conversion Input
+        </span>
         <div
-          class="uc-presets"
+          class="flex flex-wrap gap-1.5"
           id="uc-presets"
           aria-label="Quick preset values"
         >
         </div>
       </div>
 
-      <div class="uc-field">
-        <label for="uc-value-input" class="uc-label">Value to convert</label>
-        <div class="uc-input-wrap">
+      <div class="flex flex-1 flex-col gap-1.5">
+        <label
+          for="uc-value-input"
+          class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+        >
+          Value to convert
+        </label>
+        <div class="relative flex items-center">
           <input
             id="uc-value-input"
             type="text"
             inputmode="decimal"
             value="100"
             placeholder="Enter a number..."
-            class="uc-input"
+            class="w-full rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] py-2.5 pr-18 pl-3 font-mono text-base text-[var(--sl-color-white)] transition-colors duration-150 focus:border-[var(--sl-color-accent)] focus:outline-none"
             autocomplete="off"
           />
-          <span class="uc-input-unit-badge" id="uc-input-unit-badge">m</span>
+          <span
+            class="pointer-events-none absolute right-2.5 rounded bg-[var(--sl-color-gray-6)] px-2 py-0.5 font-mono text-xs text-[var(--sl-color-gray-3)]"
+            id="uc-input-unit-badge"
+          >
+            m
+          </span>
         </div>
       </div>
 
-      <div class="uc-unit-selectors">
-        <div class="uc-field">
-          <label for="uc-from-select" class="uc-label">From Unit</label>
-          <select id="uc-from-select" class="uc-select"></select>
+      <div
+        class="grid grid-cols-1 items-end gap-2.5 sm:grid-cols-[1fr_auto_1fr]"
+      >
+        <div class="flex flex-1 flex-col gap-1.5">
+          <label
+            for="uc-from-select"
+            class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+          >
+            From Unit
+          </label>
+          <select
+            id="uc-from-select"
+            class="w-full rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-3 py-2.5 text-sm text-[var(--sl-color-white)] transition-colors duration-150 focus:border-[var(--sl-color-accent)] focus:outline-none"
+          >
+          </select>
         </div>
 
         <button
           type="button"
           id="uc-swap-btn"
-          class="uc-swap-btn"
+          class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] text-[var(--sl-color-gray-2)] transition-colors duration-150 hover:border-[var(--sl-color-accent)] hover:text-[var(--sl-color-accent-high)]"
           title="Swap From and To units"
           aria-label="Swap From and To units"
         >
@@ -164,65 +216,129 @@ const locales = [
           </svg>
         </button>
 
-        <div class="uc-field">
-          <label for="uc-to-select" class="uc-label">To Unit</label>
-          <select id="uc-to-select" class="uc-select"></select>
+        <div class="flex flex-1 flex-col gap-1.5">
+          <label
+            for="uc-to-select"
+            class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+          >
+            To Unit
+          </label>
+          <select
+            id="uc-to-select"
+            class="w-full rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-3 py-2.5 text-sm text-[var(--sl-color-white)] transition-colors duration-150 focus:border-[var(--sl-color-accent)] focus:outline-none"
+          >
+          </select>
         </div>
       </div>
 
       <!-- Result Banner -->
-      <div class="uc-result-box" id="uc-result-box" aria-live="polite">
-        <div class="uc-result-top">
-          <span class="uc-result-caption" id="uc-result-formula"
-            >100 meter → kilometer</span
+      <div
+        class="mt-auto flex flex-col gap-2 rounded-lg border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] p-4"
+        id="uc-result-box"
+        aria-live="polite"
+      >
+        <div class="flex items-center justify-between gap-2">
+          <span
+            class="font-mono text-xs text-[var(--sl-color-gray-3)]"
+            id="uc-result-formula"
           >
-          <span class="uc-type-pill" id="uc-result-type">number</span>
+            100 meter → kilometer
+          </span>
+          <span
+            class="rounded-full bg-[var(--sl-color-gray-6)] px-2 py-0.5 font-mono text-[0.7rem] text-[var(--sl-color-gray-2)]"
+            id="uc-result-type"
+          >
+            number
+          </span>
         </div>
-        <div class="uc-result-main">
-          <span class="uc-result-value" id="uc-result-value">0.1</span>
-          <span class="uc-result-unit" id="uc-result-unit">km</span>
+        <div class="flex flex-wrap items-baseline gap-2 py-1">
+          <span
+            class="font-mono text-2xl font-bold break-all text-[var(--sl-color-white)]"
+            id="uc-result-value"
+          >
+            0.1
+          </span>
+          <span
+            class="font-mono text-base font-medium text-[var(--sl-color-accent-high)]"
+            id="uc-result-unit"
+          >
+            km
+          </span>
         </div>
-        <div class="uc-result-raw">
+        <div
+          class="overflow-x-auto border-t border-[var(--sl-color-gray-6)] pt-2 text-xs text-[var(--sl-color-gray-3)]"
+        >
           <code id="uc-result-json">{`{ value: 0.1, unit: "km" }`}</code>
         </div>
-        <div class="uc-error-message" id="uc-error-message" hidden></div>
+        <div
+          class="text-xs font-medium text-[var(--sl-color-red-high)]"
+          id="uc-error-message"
+          hidden
+        >
+        </div>
       </div>
     </div>
 
-    <!-- Config Options & Live Code -->
-    <div class="uc-panel uc-config-panel">
-      <div class="uc-panel-header">
-        <span class="uc-section-label">3. Configuration Options</span>
-        <button type="button" id="uc-reset-config" class="uc-text-btn"
-          >Reset defaults</button
+    <!-- 3. Configuration Options & Live Code -->
+    <div
+      class="flex flex-col gap-4 rounded-lg border border-[var(--sl-rapide-ui-border-color,var(--sl-color-gray-5))] bg-[var(--sl-rapide-ui-bg-color,var(--sl-color-gray-7))] p-5"
+    >
+      <div class="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <span
+          class="text-xs font-semibold tracking-wider text-[var(--sl-color-accent-high)] uppercase"
         >
+          3. Configuration Options
+        </span>
+        <button
+          type="button"
+          id="uc-reset-config"
+          class="cursor-pointer border-none bg-transparent p-0 text-xs text-(--sl-color-gray-3) underline hover:text-(--sl-color-accent-high)"
+        >
+          Reset defaults
+        </button>
       </div>
 
-      <div class="uc-config-controls">
-        <div class="uc-config-row">
-          <div class="uc-config-info">
-            <label for="uc-is-float" class="uc-label"
-              >Floating-point (<code>isFloat</code>)</label
+      <div class="flex flex-col gap-3.5">
+        <div
+          class="flex items-center justify-between gap-4 border-b border-(--sl-color-gray-6) pb-3"
+        >
+          <div class="flex flex-col gap-0.5">
+            <label
+              for="uc-is-float"
+              class="text-xs font-medium text-(--sl-color-gray-2)"
             >
-            <span class="uc-hint"
-              >When disabled, rounds result with <code>Math.round()</code></span
-            >
+              Floating-point (<code>isFloat</code>)
+            </label>
+            <span class="text-xs text-(--sl-color-gray-3)">
+              When disabled, rounds result with <code>Math.round()</code>
+            </span>
           </div>
-          <input id="uc-is-float" type="checkbox" checked class="uc-checkbox" />
+          <input
+            id="uc-is-float"
+            type="checkbox"
+            checked
+            class="h-4.5 w-4.5 cursor-pointer accent-(--sl-color-accent)"
+          />
         </div>
 
-        <div class="uc-config-row" id="uc-decimals-row">
-          <div class="uc-config-info">
-            <label for="uc-decimals" class="uc-label">
+        <div
+          class="flex items-center justify-between gap-4 border-b border-(--sl-color-gray-6) pb-3 transition-opacity"
+          id="uc-decimals-row"
+        >
+          <div class="flex flex-col gap-0.5">
+            <label
+              for="uc-decimals"
+              class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+            >
               Decimal places (<code>decimals</code>): <strong
                 id="uc-decimals-val">2</strong
               >
             </label>
-            <span class="uc-hint"
-              >Precision between 0 and 20 decimal places</span
-            >
+            <span class="text-xs text-[var(--sl-color-gray-3)]">
+              Precision between 0 and 20 decimal places
+            </span>
           </div>
-          <div class="uc-decimals-inputs">
+          <div class="flex items-center gap-2">
             <input
               id="uc-decimals"
               type="range"
@@ -230,7 +346,7 @@ const locales = [
               max="12"
               step="1"
               value="2"
-              class="uc-range"
+              class="w-26 cursor-pointer accent-[var(--sl-color-accent)]"
             />
             <input
               id="uc-decimals-num"
@@ -239,23 +355,30 @@ const locales = [
               max="20"
               step="1"
               value="2"
-              class="uc-number-mini"
+              class="w-15 rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-2 py-1 text-center font-mono text-sm text-[var(--sl-color-white)] focus:border-[var(--sl-color-accent)] focus:outline-none"
               aria-label="Decimal places number"
             />
           </div>
         </div>
 
-        <div class="uc-config-row uc-config-col">
-          <div class="uc-config-info">
-            <label for="uc-locale" class="uc-label"
-              >Locale formatting (<code>locale</code>)</label
+        <div
+          class="flex flex-col items-stretch gap-2 border-b border-[var(--sl-color-gray-6)] pb-3"
+        >
+          <div class="flex flex-col gap-0.5">
+            <label
+              for="uc-locale"
+              class="text-xs font-medium text-[var(--sl-color-gray-2)]"
             >
-            <span class="uc-hint"
-              >Formats numeric output via <code>toLocaleString(locale)</code
-              ></span
-            >
+              Locale formatting (<code>locale</code>)
+            </label>
+            <span class="text-xs text-[var(--sl-color-gray-3)]">
+              Formats numeric output via <code>toLocaleString(locale)</code>
+            </span>
           </div>
-          <select id="uc-locale" class="uc-select">
+          <select
+            id="uc-locale"
+            class="w-full rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-3 py-2.5 text-sm text-[var(--sl-color-white)] transition-colors duration-150 focus:border-[var(--sl-color-accent)] focus:outline-none"
+          >
             {
               locales.map((loc) => (
                 <option value={loc.value}>{loc.label}</option>
@@ -266,26 +389,44 @@ const locales = [
       </div>
 
       <!-- Live Code Preview -->
-      <div class="uc-code-block">
-        <div class="uc-code-header">
-          <span class="uc-code-title">TypeScript Usage</span>
-          <button type="button" id="uc-copy-code" class="uc-copy-btn"
-            >Copy code</button
+      <div
+        class="mt-auto overflow-hidden rounded-lg border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)]"
+      >
+        <div
+          class="flex items-center justify-between border-b border-[var(--sl-color-gray-6)] bg-[var(--sl-color-gray-7)] px-3 py-2"
+        >
+          <span
+            class="text-[0.72rem] font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
           >
+            TypeScript Usage
+          </span>
+          <button
+            type="button"
+            id="uc-copy-code"
+            class="cursor-pointer rounded border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-2 py-0.5 text-[0.72rem] text-[var(--sl-color-gray-2)] hover:border-[var(--sl-color-accent)] hover:text-[var(--sl-color-accent-high)]"
+          >
+            Copy code
+          </button>
         </div>
-        <pre class="uc-pre"><code id="uc-code-preview" /></pre>
+        <pre
+          class="m-0 overflow-x-auto px-3.5 py-3 font-mono text-[0.78rem] leading-relaxed text-[var(--sl-color-gray-1)]"><code id="uc-code-preview" /></pre>
       </div>
     </div>
   </div>
 
   <!-- All Units in Category Table -->
-  <div class="uc-section uc-all-units-section">
-    <div class="uc-section-header">
+  <div
+    class="rounded-lg border border-[var(--sl-rapide-ui-border-color,var(--sl-color-gray-5))] bg-[var(--sl-rapide-ui-bg-color,var(--sl-color-gray-7))] p-5"
+  >
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
       <div>
-        <span class="uc-section-label" id="uc-table-title"
-          >All Length Conversions</span
+        <span
+          class="text-xs font-semibold tracking-wider text-[var(--sl-color-accent-high)] uppercase"
+          id="uc-table-title"
         >
-        <p class="uc-table-subtitle">
+          All Length Conversions
+        </span>
+        <p class="mt-1 mb-0 text-xs text-[var(--sl-color-gray-3)]">
           Showing live conversions from <strong id="uc-table-from-summary"
             >100 meter</strong
           > to every unit in this category. Click any row to set it as the target
@@ -294,17 +435,37 @@ const locales = [
       </div>
     </div>
 
-    <div class="uc-table-wrap">
-      <table class="uc-table">
+    <div
+      class="overflow-x-auto rounded-lg border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)]"
+    >
+      <table class="w-full border-collapse text-left text-sm">
         <thead>
           <tr>
-            <th>Target Unit</th>
-            <th>Label / Symbol</th>
-            <th>Converted Value</th>
-            <th>Return Object</th>
+            <th
+              class="border-b border-[var(--sl-color-gray-5)] bg-[var(--sl-color-gray-7)] px-3.5 py-2.5 text-xs font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+            >
+              Target Unit
+            </th>
+            <th
+              class="border-b border-[var(--sl-color-gray-5)] bg-[var(--sl-color-gray-7)] px-3.5 py-2.5 text-xs font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+            >
+              Label / Symbol
+            </th>
+            <th
+              class="border-b border-[var(--sl-color-gray-5)] bg-[var(--sl-color-gray-7)] px-3.5 py-2.5 text-xs font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+            >
+              Converted Value
+            </th>
+            <th
+              class="border-b border-[var(--sl-color-gray-5)] bg-[var(--sl-color-gray-7)] px-3.5 py-2.5 text-xs font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+            >
+              Return Object
+            </th>
           </tr>
         </thead>
-        <tbody id="uc-all-units-body"></tbody>
+        <tbody
+          id="uc-all-units-body"
+          class="divide-y divide-[var(--sl-color-gray-6)]"></tbody>
       </table>
     </div>
   </div>
@@ -336,6 +497,27 @@ const locales = [
     energy: ["1", "100", "1000", "3600"],
     force: ["1", "9.80665", "100", "1000"],
   };
+
+  const TAB_ACTIVE_CLASSES = [
+    "border-[var(--sl-color-green,var(--sl-color-accent))]",
+    "bg-[var(--sl-color-green-low,var(--sl-color-accent-low))]",
+    "text-[var(--sl-color-green-high,var(--sl-color-accent-high))]",
+  ];
+  const TAB_INACTIVE_CLASSES = [
+    "border-[var(--sl-color-gray-5)]",
+    "bg-[var(--sl-color-black)]",
+    "text-[var(--sl-color-gray-2)]",
+    "hover:border-[var(--sl-color-gray-3)]",
+    "hover:text-[var(--sl-color-white)]",
+  ];
+  const COUNT_ACTIVE_CLASSES = [
+    "bg-[var(--sl-color-black)]",
+    "text-[var(--sl-color-green-high,var(--sl-color-accent-high))]",
+  ];
+  const COUNT_INACTIVE_CLASSES = [
+    "bg-[var(--sl-color-gray-6)]",
+    "text-[var(--sl-color-gray-3)]",
+  ];
 
   function formatUnitName(unitId: string): string {
     if (unitId === "base8") return "Octal (base8)";
@@ -421,7 +603,8 @@ const locales = [
       for (const preset of presets) {
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "uc-preset-btn";
+        btn.className =
+          "cursor-pointer rounded border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-2 py-0.5 font-mono text-xs text-[var(--sl-color-gray-2)] transition-colors duration-120 hover:border-[var(--sl-color-accent)] hover:text-[var(--sl-color-accent-high)]";
         btn.textContent = preset;
         btn.addEventListener("click", () => {
           valueInput.value = preset;
@@ -520,7 +703,7 @@ const locales = [
 
     function updateConversion() {
       const config = getConfig();
-      decimalsRow.classList.toggle("is-disabled", !config.isFloat);
+      decimalsRow.classList.toggle("opacity-45", !config.isFloat);
       decimalsRange.disabled = !config.isFloat;
       decimalsNum.disabled = !config.isFloat;
 
@@ -551,7 +734,14 @@ const locales = [
         const res = runConvert(parsedValue)
           .from(fromUnit)
           .to(toUnit as never);
-        resultBox.classList.remove("has-error");
+        resultBox.classList.remove(
+          "border-[var(--sl-color-red)]",
+          "bg-[var(--sl-color-red-low)]",
+        );
+        resultBox.classList.add(
+          "border-[var(--sl-color-gray-5)]",
+          "bg-[var(--sl-color-black)]",
+        );
         errorMessage.hidden = true;
         resultValue.textContent = String(res.value);
         resultUnit.textContent =
@@ -570,7 +760,14 @@ const locales = [
         );
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        resultBox.classList.add("has-error");
+        resultBox.classList.remove(
+          "border-[var(--sl-color-gray-5)]",
+          "bg-[var(--sl-color-black)]",
+        );
+        resultBox.classList.add(
+          "border-[var(--sl-color-red)]",
+          "bg-[var(--sl-color-red-low)]",
+        );
         errorMessage.hidden = false;
         errorMessage.textContent = msg;
         resultValue.textContent = "—";
@@ -591,35 +788,41 @@ const locales = [
       allUnitsBody.innerHTML = "";
       for (const target of activeCategory.units) {
         const tr = document.createElement("tr");
-        tr.className = "uc-table-row";
-        if (target.id === toUnit) {
-          tr.classList.add("is-selected");
-        }
+        const isSelected = target.id === toUnit;
+        tr.className = isSelected
+          ? "cursor-pointer transition-colors duration-100 bg-[var(--sl-color-green-low,var(--sl-color-accent-low))]"
+          : "cursor-pointer transition-colors duration-100 hover:bg-[var(--sl-color-gray-7)]";
+
         tr.addEventListener("click", () => {
           toSelect.value = target.id;
           updateConversion();
         });
 
         const tdName = document.createElement("td");
-        tdName.className = "uc-td-unit";
+        tdName.className =
+          "px-3.5 py-2.5 align-middle flex flex-wrap items-center gap-2";
         const nameSpan = document.createElement("span");
-        nameSpan.className = "uc-unit-name";
+        nameSpan.className = "font-medium text-[var(--sl-color-white)]";
         nameSpan.textContent = formatUnitName(target.id);
         const codeId = document.createElement("code");
-        codeId.className = "uc-unit-id";
+        codeId.className =
+          "rounded bg-[var(--sl-color-gray-6)] px-1.5 py-0.5 font-mono text-[0.72rem] text-[var(--sl-color-gray-3)]";
         codeId.textContent = `"${target.id}"`;
         tdName.append(nameSpan, codeId);
 
         const tdSymbol = document.createElement("td");
+        tdSymbol.className = "px-3.5 py-2.5 align-middle";
         const symCode = document.createElement("code");
+        symCode.className = "font-mono text-xs text-[var(--sl-color-gray-2)]";
         symCode.textContent = target.symbol;
         tdSymbol.appendChild(symCode);
 
         const tdVal = document.createElement("td");
-        tdVal.className = "uc-td-value";
+        tdVal.className =
+          "px-3.5 py-2.5 align-middle font-mono text-[var(--sl-color-white)]";
 
         const tdObj = document.createElement("td");
-        tdObj.className = "uc-td-obj";
+        tdObj.className = "px-3.5 py-2.5 align-middle";
 
         try {
           if (rawValue.trim() === "") {
@@ -631,23 +834,24 @@ const locales = [
           const strong = document.createElement("strong");
           strong.textContent = String(r.value);
           const unitSub = document.createElement("span");
-          unitSub.className = "uc-td-unit-suffix";
+          unitSub.className = "text-xs text-[var(--sl-color-accent-high)]";
           unitSub.textContent =
             activeCategory.id === "number" ? "" : ` ${r.unit}`;
           tdVal.append(strong, unitSub);
 
           const objCode = document.createElement("code");
+          objCode.className = "font-mono text-xs text-[var(--sl-color-gray-3)]";
           objCode.textContent = `{ value: ${JSON.stringify(r.value)}, unit: ${JSON.stringify(r.unit)} }`;
           tdObj.appendChild(objCode);
         } catch (err) {
           const errSpan = document.createElement("span");
-          errSpan.className = "uc-td-err";
+          errSpan.className = "text-xs text-[var(--sl-color-red-high)]";
           errSpan.textContent =
             err instanceof Error ? err.message : "Invalid input";
           tdVal.appendChild(errSpan);
 
           const dash = document.createElement("span");
-          dash.className = "uc-td-err";
+          dash.className = "text-xs text-[var(--sl-color-red-high)]";
           dash.textContent = "—";
           tdObj.appendChild(dash);
         }
@@ -667,8 +871,19 @@ const locales = [
         activeCategory = found;
         tabButtons.forEach((b) => {
           const isCurrent = b === btn;
-          b.classList.toggle("active", isCurrent);
           b.setAttribute("aria-selected", isCurrent ? "true" : "false");
+          const countEl = b.querySelector(".uc-tab-count");
+          if (isCurrent) {
+            b.classList.remove(...TAB_INACTIVE_CLASSES);
+            b.classList.add(...TAB_ACTIVE_CLASSES);
+            countEl?.classList.remove(...COUNT_INACTIVE_CLASSES);
+            countEl?.classList.add(...COUNT_ACTIVE_CLASSES);
+          } else {
+            b.classList.remove(...TAB_ACTIVE_CLASSES);
+            b.classList.add(...TAB_INACTIVE_CLASSES);
+            countEl?.classList.remove(...COUNT_ACTIVE_CLASSES);
+            countEl?.classList.add(...COUNT_INACTIVE_CLASSES);
+          }
         });
 
         categoryDescEl.textContent = activeCategory.description;
@@ -751,534 +966,3 @@ const locales = [
   initPlayground();
   document.addEventListener("astro:page-load", initPlayground);
 </script>
-
-<style>
-  .uc-playground {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-block: 1rem 2rem;
-    color: var(--sl-color-text);
-    font-family: var(--sl-font);
-  }
-
-  .uc-section,
-  .uc-panel {
-    background-color: var(--sl-rapide-ui-bg-color, var(--sl-color-gray-7));
-    border: 1px solid var(--sl-rapide-ui-border-color, var(--sl-color-gray-5));
-    border-radius: 0.5rem;
-    padding: 1.25rem;
-  }
-
-  .uc-section-header,
-  .uc-panel-header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .uc-section-label {
-    font-size: var(--sl-text-xs);
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--sl-color-accent-high);
-  }
-
-  .uc-category-desc {
-    font-size: var(--sl-text-xs);
-    color: var(--sl-color-gray-3);
-  }
-
-  /* Category Tabs */
-  .uc-category-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .uc-tab {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.8rem;
-    border-radius: 0.375rem;
-    border: 1px solid var(--sl-color-gray-5);
-    background-color: var(--sl-color-black);
-    color: var(--sl-color-gray-2);
-    font-size: var(--sl-text-sm);
-    font-weight: 500;
-    cursor: pointer;
-    transition:
-      border-color 150ms ease-out,
-      color 150ms ease-out,
-      background-color 150ms ease-out;
-  }
-
-  .uc-tab:hover {
-    border-color: var(--sl-color-gray-3);
-    color: var(--sl-color-white);
-  }
-
-  .uc-tab.active {
-    background-color: var(--sl-color-green-low, var(--sl-color-accent-low));
-    border-color: var(--sl-color-green, var(--sl-color-accent));
-    color: var(--sl-color-green-high, var(--sl-color-accent-high));
-  }
-
-  .uc-tab-count {
-    font-size: 0.7rem;
-    padding: 0.05rem 0.375rem;
-    border-radius: 999px;
-    background-color: var(--sl-color-gray-6);
-    color: var(--sl-color-gray-3);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .uc-tab.active .uc-tab-count {
-    background-color: var(--sl-color-black);
-    color: var(--sl-color-green-high, var(--sl-color-accent-high));
-  }
-
-  /* Main Grid */
-  .uc-converter-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .uc-inputs-panel,
-  .uc-config-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .uc-inputs-panel .uc-panel-header,
-  .uc-config-panel .uc-panel-header {
-    margin-bottom: 0.25rem;
-  }
-
-  /* Presets */
-  .uc-presets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
-
-  .uc-preset-btn {
-    padding: 0.15rem 0.5rem;
-    font-size: var(--sl-text-xs);
-    font-family: var(--sl-font-mono);
-    border-radius: 0.25rem;
-    border: 1px solid var(--sl-color-gray-5);
-    background-color: var(--sl-color-black);
-    color: var(--sl-color-gray-2);
-    cursor: pointer;
-    transition:
-      border-color 120ms ease-out,
-      color 120ms ease-out;
-  }
-
-  .uc-preset-btn:hover {
-    border-color: var(--sl-color-accent);
-    color: var(--sl-color-accent-high);
-  }
-
-  /* Fields */
-  .uc-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-    flex: 1;
-  }
-
-  .uc-label {
-    font-size: var(--sl-text-xs);
-    font-weight: 500;
-    color: var(--sl-color-gray-2);
-  }
-
-  .uc-input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .uc-input,
-  .uc-select,
-  .uc-number-mini {
-    width: 100%;
-    padding: 0.6rem 0.75rem;
-    border-radius: 0.375rem;
-    border: 1px solid var(--sl-color-gray-5);
-    background-color: var(--sl-color-black);
-    color: var(--sl-color-white);
-    font-size: var(--sl-text-sm);
-    font-family: inherit;
-    transition: border-color 120ms ease-out;
-  }
-
-  .uc-input {
-    font-family: var(--sl-font-mono);
-    font-size: var(--sl-text-base);
-    padding-right: 4.5rem;
-  }
-
-  .uc-input:focus,
-  .uc-select:focus,
-  .uc-number-mini:focus {
-    outline: none;
-    border-color: var(--sl-color-accent);
-  }
-
-  .uc-input-unit-badge {
-    position: absolute;
-    right: 0.65rem;
-    font-size: var(--sl-text-xs);
-    font-family: var(--sl-font-mono);
-    color: var(--sl-color-gray-3);
-    background-color: var(--sl-color-gray-6);
-    padding: 0.15rem 0.45rem;
-    border-radius: 0.25rem;
-    pointer-events: none;
-  }
-
-  .uc-unit-selectors {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: end;
-    gap: 0.6rem;
-  }
-
-  @media (max-width: 36rem) {
-    .uc-unit-selectors {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .uc-swap-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 2.4rem;
-    width: 2.4rem;
-    border-radius: 0.375rem;
-    border: 1px solid var(--sl-color-gray-5);
-    background-color: var(--sl-color-black);
-    color: var(--sl-color-gray-2);
-    cursor: pointer;
-    transition:
-      border-color 120ms ease-out,
-      color 120ms ease-out,
-      transform 150ms ease-out;
-  }
-
-  .uc-swap-btn:hover {
-    border-color: var(--sl-color-accent);
-    color: var(--sl-color-accent-high);
-  }
-
-  /* Result Box */
-  .uc-result-box {
-    margin-top: auto;
-    padding: 1rem 1.1rem;
-    border-radius: 0.5rem;
-    background-color: var(--sl-color-black);
-    border: 1px solid var(--sl-color-gray-5);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .uc-result-box.has-error {
-    border-color: var(--sl-color-red);
-    background-color: var(--sl-color-red-low);
-  }
-
-  .uc-result-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-  }
-
-  .uc-result-caption {
-    font-size: var(--sl-text-xs);
-    color: var(--sl-color-gray-3);
-    font-family: var(--sl-font-mono);
-  }
-
-  .uc-type-pill {
-    font-size: 0.7rem;
-    font-family: var(--sl-font-mono);
-    padding: 0.1rem 0.45rem;
-    border-radius: 999px;
-    background-color: var(--sl-color-gray-6);
-    color: var(--sl-color-gray-2);
-  }
-
-  .uc-result-main {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding-block: 0.25rem;
-  }
-
-  .uc-result-value {
-    font-size: var(--sl-text-2xl);
-    font-weight: 700;
-    color: var(--sl-color-white);
-    font-family: var(--sl-font-mono);
-    word-break: break-all;
-  }
-
-  .uc-result-unit {
-    font-size: var(--sl-text-base);
-    font-weight: 500;
-    color: var(--sl-color-accent-high);
-    font-family: var(--sl-font-mono);
-  }
-
-  .uc-result-raw {
-    padding-top: 0.5rem;
-    border-top: 1px solid var(--sl-color-gray-6);
-    font-size: var(--sl-text-xs);
-    color: var(--sl-color-gray-3);
-    overflow-x: auto;
-  }
-
-  .uc-error-message {
-    font-size: var(--sl-text-xs);
-    color: var(--sl-color-red-high);
-    font-weight: 500;
-  }
-
-  /* Config Controls */
-  .uc-config-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-  }
-
-  .uc-config-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--sl-color-gray-6);
-  }
-
-  .uc-config-row.uc-config-col {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.45rem;
-  }
-
-  .uc-config-row.is-disabled {
-    opacity: 0.45;
-  }
-
-  .uc-config-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .uc-hint {
-    font-size: 0.75rem;
-    color: var(--sl-color-gray-3);
-  }
-
-  .uc-checkbox {
-    width: 1.15rem;
-    height: 1.15rem;
-    accent-color: var(--sl-color-accent);
-    cursor: pointer;
-  }
-
-  .uc-decimals-inputs {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .uc-range {
-    width: 6.5rem;
-    accent-color: var(--sl-color-accent);
-    cursor: pointer;
-  }
-
-  .uc-number-mini {
-    width: 3.75rem;
-    padding: 0.3rem 0.45rem;
-    text-align: center;
-    font-family: var(--sl-font-mono);
-  }
-
-  .uc-text-btn {
-    background: none;
-    border: none;
-    color: var(--sl-color-gray-3);
-    font-size: var(--sl-text-xs);
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-  }
-
-  .uc-text-btn:hover {
-    color: var(--sl-color-accent-high);
-  }
-
-  /* Live Code Block */
-  .uc-code-block {
-    margin-top: auto;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.5rem;
-    background-color: var(--sl-color-black);
-    overflow: hidden;
-  }
-
-  .uc-code-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.45rem 0.75rem;
-    border-bottom: 1px solid var(--sl-color-gray-6);
-    background-color: var(--sl-color-gray-7);
-  }
-
-  .uc-code-title {
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--sl-color-gray-3);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .uc-copy-btn {
-    font-size: 0.72rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: 0.25rem;
-    border: 1px solid var(--sl-color-gray-5);
-    background-color: var(--sl-color-black);
-    color: var(--sl-color-gray-2);
-    cursor: pointer;
-  }
-
-  .uc-copy-btn:hover {
-    border-color: var(--sl-color-accent);
-    color: var(--sl-color-accent-high);
-  }
-
-  .uc-pre {
-    margin: 0;
-    padding: 0.75rem 0.9rem;
-    font-size: 0.78rem;
-    font-family: var(--sl-font-mono);
-    line-height: 1.55;
-    color: var(--sl-color-gray-1);
-    overflow-x: auto;
-  }
-
-  /* All Units Table */
-  .uc-table-subtitle {
-    margin: 0.25rem 0 0;
-    font-size: var(--sl-text-xs);
-    color: var(--sl-color-gray-3);
-  }
-
-  .uc-table-wrap {
-    overflow-x: auto;
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.5rem;
-    background-color: var(--sl-color-black);
-  }
-
-  .uc-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--sl-text-sm);
-    text-align: left;
-  }
-
-  .uc-table th {
-    padding: 0.65rem 0.9rem;
-    font-size: var(--sl-text-xs);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--sl-color-gray-3);
-    border-bottom: 1px solid var(--sl-color-gray-5);
-    background-color: var(--sl-color-gray-7);
-  }
-
-  :global(.uc-table td) {
-    padding: 0.6rem 0.9rem;
-    border-bottom: 1px solid var(--sl-color-gray-6);
-    vertical-align: middle;
-  }
-
-  :global(.uc-table tbody tr:last-child td) {
-    border-bottom: none;
-  }
-
-  :global(.uc-table-row) {
-    cursor: pointer;
-    transition: background-color 100ms ease-out;
-  }
-
-  :global(.uc-table-row:hover) {
-    background-color: var(--sl-color-gray-7);
-  }
-
-  :global(.uc-table-row.is-selected) {
-    background-color: var(--sl-color-green-low, var(--sl-color-accent-low));
-  }
-
-  :global(.uc-td-unit) {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  :global(.uc-unit-name) {
-    font-weight: 500;
-    color: var(--sl-color-white);
-  }
-
-  :global(.uc-unit-id) {
-    font-size: 0.72rem;
-    color: var(--sl-color-gray-3);
-    background-color: var(--sl-color-gray-6);
-    padding: 0.1rem 0.35rem;
-    border-radius: 0.25rem;
-  }
-
-  :global(.uc-td-value) {
-    font-family: var(--sl-font-mono);
-    color: var(--sl-color-white);
-  }
-
-  :global(.uc-td-unit-suffix) {
-    color: var(--sl-color-accent-high);
-    font-size: var(--sl-text-xs);
-  }
-
-  :global(.uc-td-obj code) {
-    font-size: 0.75rem;
-    color: var(--sl-color-gray-3);
-    font-family: var(--sl-font-mono);
-  }
-
-  :global(.uc-td-err) {
-    font-size: var(--sl-text-xs);
-    color: var(--sl-color-red-high);
-  }
-</style>

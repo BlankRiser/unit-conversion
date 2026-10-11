@@ -10,6 +10,7 @@ export default defineConfig({
     starlight({
       title: "Unit Conversion",
       plugins: [starlightThemeRapide()],
+      customCss: ["./src/styles/global.css"],
       expressiveCode: {
         // Look at ec.config.mjs instead
       },
