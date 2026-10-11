@@ -719,8 +719,7 @@ const locales = [
       const parsedValue = parseInputValue(rawValue);
 
       const convert = new Conversion(config);
-      const runConvert = (val: number | string) =>
-        typeof convert === "function" ? convert(val) : convert.value(val);
+      const runConvert = (val: number | string) => convert(val);
 
       resultFormula.textContent = `${rawValue.trim() || "?"} ${fromUnit} → ${toUnit}`;
       tableTitle.textContent = `All ${activeCategory.label} Conversions`;
