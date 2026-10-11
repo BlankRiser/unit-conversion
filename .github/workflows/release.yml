@@ -2,8 +2,6 @@ name: Release
 
 on:
   workflow_dispatch:
-  release:
-    types: [created]
 
 jobs:
   build:
@@ -30,6 +28,25 @@ jobs:
 
       - name: Install Dependencies
         run: bun install --frozen-lockfile
+
+      - name: Sync version with GitHub Release tag
+        if: github.event.release.tag_name != ''
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          bun -e '
+            import fs from "node:fs";
+            const rawTag = process.env.RELEASE_TAG || "";
+            const version = rawTag.replace(/^v/, "").trim();
+            if (!/^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$/.test(version)) {
+              throw new Error(`Invalid semantic version derived from tag "${rawTag}": "${version}"`);
+            }
+            for (const file of ["packages/unit-conversion/package.json", "packages/unit-conversion/jsr.jsonc"]) {
+              const content = fs.readFileSync(file, "utf8");
+              fs.writeFileSync(file, content.replace(/("version"\s*:\s*)"[^"]+"/, `$1"${version}"`), "utf8");
+            }
+            console.log(`Synced package.json and jsr.jsonc to ${version}`);
+          '
 
       - name: Test package version consistency
         run: bun run convert test:run

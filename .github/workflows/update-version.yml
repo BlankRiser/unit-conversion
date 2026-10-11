@@ -1,0 +1,122 @@
+name: Update SDK Version & Publish Release
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "New semantic version (e.g. 0.2.0 or v0.2.0)"
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+    steps:
+      - name: Determine target branch and version
+        id: meta
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          RELEASE_TARGET: ${{ github.event.release.target_commitish }}
+          INPUT_VERSION: ${{ inputs.version }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          RAW_VERSION="${RELEASE_TAG:-$INPUT_VERSION}"
+          CLEAN_VERSION="${RAW_VERSION#v}"
+
+          if [[ ! "$CLEAN_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Invalid semantic version '$CLEAN_VERSION' (from '$RAW_VERSION')"
+            exit 1
+          fi
+
+          # If target_commitish is a branch name, check out that branch; otherwise fall back to default branch
+          BRANCH="$DEFAULT_BRANCH"
+          if [[ -n "$RELEASE_TARGET" && ! "$RELEASE_TARGET" =~ ^[0-9a-f]{40}$ ]]; then
+            BRANCH="$RELEASE_TARGET"
+          fi
+
+          echo "version=$CLEAN_VERSION" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout repository branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.meta.outputs.branch }}
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.19
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Update version in package.json and jsr.jsonc
+        env:
+          NEW_VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          bun -e '
+            import fs from "node:fs";
+            const version = process.env.NEW_VERSION;
+            const files = [
+              "packages/unit-conversion/package.json",
+              "packages/unit-conversion/jsr.jsonc",
+            ];
+            for (const file of files) {
+              const content = fs.readFileSync(file, "utf8");
+              const updated = content.replace(/("version"\s*:\s*)"[^"]+"/, `$1"${version}"`);
+              fs.writeFileSync(file, updated, "utf8");
+            }
+            console.log(`Updated SDK version to ${version}`);
+          '
+
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Test package version consistency
+        run: bun run convert test:run
+
+      - name: Commit and push version bump
+        env:
+          NEW_VERSION: ${{ steps.meta.outputs.version }}
+          TARGET_BRANCH: ${{ steps.meta.outputs.branch }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if git diff --quiet packages/unit-conversion/package.json packages/unit-conversion/jsr.jsonc; then
+            echo "package.json and jsr.jsonc are already at version ${NEW_VERSION}."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+            git add packages/unit-conversion/package.json packages/unit-conversion/jsr.jsonc
+            git commit -m "chore(release): bump SDK version to ${NEW_VERSION}"
+            git push origin "HEAD:${TARGET_BRANCH}"
+
+            # Update the release tag to point to the bumped commit
+            if [[ -n "$RELEASE_TAG" ]]; then
+              git tag -f "$RELEASE_TAG" HEAD
+              git push origin "refs/tags/${RELEASE_TAG}" --force
+            fi
+          fi
+
+      - name: Build
+        run: bun run convert build
+
+      - name: Publish to NPM
+        working-directory: ./packages/unit-conversion
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: npm publish --provenance --access=public
+        continue-on-error: true
+
+      - name: Publish to JSR
+        working-directory: ./packages/unit-conversion
+        run: npx jsr publish

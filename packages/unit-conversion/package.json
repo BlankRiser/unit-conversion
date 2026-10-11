@@ -28,8 +28,26 @@
     "dist"
   ],
   "keywords": [
-    "bun",
-    "unit-conversion"
+    "unit-conversion",
+    "unit-converter",
+    "measurement",
+    "metrics",
+    "imperial",
+    "si-units",
+    "length",
+    "temperature",
+    "weight",
+    "mass",
+    "volume",
+    "time",
+    "pressure",
+    "energy",
+    "force",
+    "radix",
+    "binary",
+    "hexadecimal",
+    "typescript",
+    "bun"
   ],
   "homepage": "https://github.com/BlankRiser/unit-conversion#readme",
   "repository": {
