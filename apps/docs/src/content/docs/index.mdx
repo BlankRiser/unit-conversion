@@ -1,12 +1,31 @@
 ---
 title: "@devhaven/unit-conversion"
-description: "@devhaven/unit-conversion documentation"
+description: "A lightweight, zero-dependency, type-safe TypeScript library for converting units."
 template: doc
 ---
 
-A lightweight TypeScript library for converting units.
+import { Card, CardGrid, LinkCard, Aside } from "@astrojs/starlight/components";
 
-### Quick Start
+`@devhaven/unit-conversion` is a lightweight, zero-dependency TypeScript library for converting measurements across physical and numerical domains. It provides a fluent, chainable API that enforces category-level type safety at compile time.
+
+## Why `@devhaven/unit-conversion`?
+
+<CardGrid>
+  <Card title="Compile-Time Type Safety" icon="approve-check">
+    TypeScript automatically narrows `.to()` to units in the same category as `.from()`, catching incompatible conversions (like `meter` to `celsius`) before your code runs.
+  </Card>
+  <Card title="Zero Dependencies" icon="rocket">
+    Built with pure TypeScript and standard JavaScript APIs. Works out of the box in Node.js, Bun, Deno, edge runtimes, and modern browsers.
+  </Card>
+  <Card title="Fluent & Callable API" icon="puzzle">
+    Call your converter instance directly with `convert(100)` or use `convert.value(100)`, passing either `number` or numeric `string` inputs.
+  </Card>
+  <Card title="Precision & Locale Formatting" icon="setting">
+    Customize decimal precision (`decimals`), toggle integer rounding (`isFloat`), or format numbers for any region with `locale`.
+  </Card>
+</CardGrid>
+
+## Quick Start
 
 ```ts
 import { Conversion } from "@devhaven/unit-conversion";
@@ -14,7 +33,75 @@ import { Conversion } from "@devhaven/unit-conversion";
 const convert = new Conversion();
 
 // Convert 100 meters → kilometers
-const { value, unit } = convert.value(100).from("meter").to("kilometer");
+const { value, unit } = convert(100).from("meter").to("kilometer");
 console.log(value, unit);
 // 0.1, "km"
+
+// Customize precision and locale formatting
+const formatted = new Conversion({ decimals: 3, locale: "en-US" });
+const distance = formatted(5280).from("foot").to("meter");
+console.log(`${distance.value} ${distance.unit}`);
+// "1,609.344 m"
 ```
+
+<Aside type="tip" title="Try it in your browser">
+  Want to test conversions and configuration options interactively? Head over to the [Playground](/playground/) to experiment with all supported units and generate TypeScript snippets.
+</Aside>
+
+## Type-Safe by Design
+
+When you select a unit in `.from()`, TypeScript infers the unit category (`UnitCategory<F>`) and restricts `.to()` to valid target units within that same category:
+
+```ts
+import { Conversion } from "@devhaven/unit-conversion";
+
+const convert = new Conversion();
+
+// Valid: both "celsius" and "fahrenheit" belong to TemperatureUnits
+convert(100).from("celsius").to("fahrenheit"); // { value: 212, unit: "°F" }
+
+// TypeScript compile-time error:
+// Argument of type '"kilogram"' is not assignable to parameter of type 'TemperatureUnits'.
+convert(100).from("celsius").to("kilogram");
+```
+
+## Supported Categories
+
+`@devhaven/unit-conversion` supports **9 measurement categories** out of the box. Each category converts values through a standard base unit:
+
+| Category | Base Unit | Supported Units |
+| :--- | :--- | :--- |
+| [**Length**](/conversions/length/) | `meter` (`m`) | `millimeter`, `centimeter`, `meter`, `kilometer`, `inch`, `foot`, `yard`, `mile` |
+| [**Temperature**](/conversions/temperature/) | `kelvin` (`K`) | `celsius`, `fahrenheit`, `kelvin` |
+| [**Weight**](/conversions/weight/) | `gram` (`g`) | `milligram`, `gram`, `kilogram`, `ounce`, `pound`, `ton` |
+| [**Volume**](/conversions/volume/) | `liter` (`l`) | `milliliter`, `liter`, `cubic-meter`, `cubic-foot`, `cubic-inch`, `us-legal-cup`, `imperial-cup`, `us-liquid-pint`, `imperial-pint`, `imperial-fluid-ounce` |
+| [**Time**](/conversions/time/) | `second` (`s`) | `millisecond`, `second`, `minute`, `hour`, `day`, `week` |
+| [**Number**](/conversions/number/) | `decimal` | `decimal`, `binary`, `base8` (octal), `hexadecimal` |
+| [**Pressure**](/conversions/pressure/) | `pascal` (`Pa`) | `pascal`, `kilopascal`, `bar`, `psi`, `atmosphere` |
+| [**Energy**](/conversions/energy/) | `joule` (`J`) | `joule`, `kilojoule`, `calorie`, `calorie-international-table`, `calorie-thermochemical`, `watt-hour`, `kilowatt-hour`, `electron-volt` |
+| [**Force**](/conversions/force/) | `newton` (`N`) | `newton`, `dyne`, `poundal`, `pound-force`, `kilogram-force` |
+
+## Explore the Documentation
+
+<CardGrid>
+  <LinkCard
+    title="Getting Started & Installation"
+    description="Install via npm, pnpm, Yarn, Bun, or JSR and run your first conversion."
+    href="/installation/"
+  />
+  <LinkCard
+    title="Interactive Playground"
+    description="Test all unit conversions and configuration options live in the browser."
+    href="/playground/"
+  />
+  <LinkCard
+    title="API Reference"
+    description="Explore ConversionConfig options, exported constants, and utility helpers."
+    href="/api-reference/"
+  />
+  <LinkCard
+    title="Conversion Guides"
+    description="Browse unit-by-unit examples and reference guides for every category."
+    href="/conversions/length/"
+  />
+</CardGrid>

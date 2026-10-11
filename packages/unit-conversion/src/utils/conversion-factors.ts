@@ -48,7 +48,7 @@ interface ConversionFactorGroups {
  *
  * @property {Object} temperature - Temperature conversions with Kelvin as base unit
  * @property {Object} length - Length conversions with meter as base unit
- * @property {Object} weight - Weight conversions with gram as base unit
+ * @property {Object} mass - Mass conversions with gram as base unit
  * @property {Object} volume - Volume conversions with liter as base unit
  * @property {Object} time - Time conversions with second as base unit
  * @property {Object} force - Force conversions with Newton as base unit
@@ -108,7 +108,7 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
     },
   },
 
-  // Weight (base: gram)
+  // Mass (base: gram)
   weight: {
     gram: {
       isBaseUnit: true,
@@ -135,63 +135,6 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
     ton: {
       toBase: (v: number) => v * 1_000_000,
       fromBase: (v: number) => v / 1_000_000,
-    },
-  },
-
-  // Volume (base: liter)
-  volume: {
-    liter: {
-      isBaseUnit: true,
-      toBase: (v: number) => v,
-      fromBase: (v: number) => v,
-    },
-    milliliter: {
-      toBase: (v: number) => v / 1000,
-      fromBase: (v: number) => v * 1000,
-    },
-    "cubic-meter": {
-      toBase: (v: number) => v / 0.001,
-      fromBase: (v: number) => v * 0.001,
-    },
-    "cubic-centimeter": {
-      toBase: (v: number) => v / 1000,
-      fromBase: (v: number) => v * 1000,
-    },
-    "cubic-foot": {
-      toBase: (v: number) => v * 28.31685,
-      fromBase: (v: number) => v / 28.31685,
-    },
-    "cubic-inch": {
-      toBase: (v: number) => v / 61.023744095,
-      fromBase: (v: number) => v * 61.023744095,
-    },
-    "imperial-cup": {
-      toBase: (v: number) => v / 3.5195079728,
-      fromBase: (v: number) => v * 3.5195079728,
-    },
-    "us-legal-cup": {
-      toBase: (v: number) => v / 4.2267528377,
-      fromBase: (v: number) => v * 4.2267528377,
-    },
-    "us-gallon": {
-      toBase: (v: number) => v / 0.2641720524,
-      fromBase: (v: number) => v * 0.2641720524,
-    },
-    "imperial-gallon": {
-      toBase: (v: number) => v / 0.2199692483,
-      fromBase: (v: number) => v * 0.2199692483,
-    },
-    "us-liquid-pint": {
-      toBase: (v: number) => v / 2.1133764189,
-      fromBase: (v: number) => v * 2.1133764189,
-    },
-    "imperial-pint": {
-      toBase: (v: number) => v / 1.7597539864,
-      fromBase: (v: number) => v * 1.7597539864,
-    },
-    "imperial-fluid-ounce": {
-      toBase: (v: number) => v / 35.195079728,
-      fromBase: (v: number) => v * 35.195079728,
     },
   },
 
@@ -324,12 +267,9 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
         if (!Number.isInteger(decimal)) throw new Error("Input must be an integer");
 
         let num = Math.abs(decimal);
-
         const hexDigits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
-
         let result = "";
 
-        // Convert to base-16 by repeatedly dividing by 16 and collecting remainders
         while (num > 0) {
           const remainder = num % 16;
           result = hexDigits[remainder] + result;
@@ -388,6 +328,63 @@ export const CONVERSION_FACTORS: ConversionFactorGroups = {
     },
   },
   // Angle (base: radian)
+
+  // Volume (base: liter)
+  volume: {
+    liter: {
+      isBaseUnit: true,
+      toBase: (v: number) => v,
+      fromBase: (v: number) => v,
+    },
+    milliliter: {
+      toBase: (v: number) => v / 1000,
+      fromBase: (v: number) => v * 1000,
+    },
+    "cubic-meter": {
+      toBase: (v: number) => v / 0.001,
+      fromBase: (v: number) => v * 0.001,
+    },
+    "cubic-centimeter": {
+      toBase: (v: number) => v / 1000,
+      fromBase: (v: number) => v * 1000,
+    },
+    "cubic-foot": {
+      toBase: (v: number) => v * 28.31685,
+      fromBase: (v: number) => v / 28.31685,
+    },
+    "cubic-inch": {
+      toBase: (v: number) => v / 61.023744095,
+      fromBase: (v: number) => v * 61.023744095,
+    },
+    "imperial-cup": {
+      toBase: (v: number) => v / 3.5195079728,
+      fromBase: (v: number) => v * 3.5195079728,
+    },
+    "us-legal-cup": {
+      toBase: (v: number) => v / 4.2267528377,
+      fromBase: (v: number) => v * 4.2267528377,
+    },
+    "us-gallon": {
+      toBase: (v: number) => v / 0.2641720524,
+      fromBase: (v: number) => v * 0.2641720524,
+    },
+    "imperial-gallon": {
+      toBase: (v: number) => v / 0.2199692483,
+      fromBase: (v: number) => v * 0.2199692483,
+    },
+    "us-liquid-pint": {
+      toBase: (v: number) => v / 2.1133764189,
+      fromBase: (v: number) => v * 2.1133764189,
+    },
+    "imperial-pint": {
+      toBase: (v: number) => v / 1.7597539864,
+      fromBase: (v: number) => v * 1.7597539864,
+    },
+    "imperial-fluid-ounce": {
+      toBase: (v: number) => v / 35.195079728,
+      fromBase: (v: number) => v * 35.195079728,
+    },
+  },
 
   // Force (base: newton)
   force: {

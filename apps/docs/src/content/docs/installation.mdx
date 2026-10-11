@@ -1,31 +1,160 @@
 ---
 title: "Getting Started"
+description: "Learn how to install and configure @devhaven/unit-conversion in your TypeScript or JavaScript project."
 template: doc
 ---
+
 import { PackageManagers } from "starlight-package-managers";
-import { Tabs, TabItem } from '@astrojs/starlight/components';
-import { Code } from '@astrojs/starlight/components'
+import { Tabs, TabItem, Steps, Aside, LinkCard, CardGrid } from "@astrojs/starlight/components";
 
-# Installation
+This guide walks you through installing `@devhaven/unit-conversion`, importing it across different JavaScript runtimes, and configuring your first unit conversions.
 
-You can install `@devhaven/unit-conversion` from [npm](https://www.npmjs.com/package/@devhaven/unit-conversion):
+## Installation
+
+### From npm
+
+Install `@devhaven/unit-conversion` from the [npm registry](https://www.npmjs.com/package/@devhaven/unit-conversion) using your preferred package manager:
 
 <PackageManagers
   pkg="@devhaven/unit-conversion"
   pkgManagers={["npm", "yarn", "pnpm", "bun"]}
 />
 
+### From JSR
 
-or [JSR](https://jsr.io/@devhaven/unit-conversion):
+`@devhaven/unit-conversion` is also published to [JSR](https://jsr.io/@devhaven/unit-conversion) with native TypeScript support:
 
-```bash
-npx jsr add @devhaven/unit-conversion
-# or
-yarn add jsr:@devhaven/unit-conversion
-# or
-pnpm i jsr:@devhaven/unit-conversion
-# or
-bunx jsr add @devhaven/unit-conversion
-# or
-deno add jsr:@devhaven/unit-conversion
-```
+<Tabs syncKey="pkg-jsr">
+  <TabItem label="Deno">
+    ```bash
+    deno add jsr:@devhaven/unit-conversion
+    ```
+  </TabItem>
+  <TabItem label="npm">
+    ```bash
+    npx jsr add @devhaven/unit-conversion
+    ```
+  </TabItem>
+  <TabItem label="Bun">
+    ```bash
+    bunx jsr add @devhaven/unit-conversion
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```bash
+    pnpm i jsr:@devhaven/unit-conversion
+    ```
+  </TabItem>
+  <TabItem label="Yarn">
+    ```bash
+    yarn add jsr:@devhaven/unit-conversion
+    ```
+  </TabItem>
+</Tabs>
+
+## Importing the Library
+
+The package ships with both **ES Modules (ESM)** and **CommonJS (CJS)** builds alongside bundled **TypeScript declaration files** (`.d.ts`).
+
+<Tabs syncKey="module-format">
+  <TabItem label="ESM / TypeScript">
+    ```ts
+    import { Conversion, UNITS, LABELS } from "@devhaven/unit-conversion";
+    ```
+  </TabItem>
+  <TabItem label="CommonJS">
+    ```js
+    const { Conversion, UNITS, LABELS } = require("@devhaven/unit-conversion");
+    ```
+  </TabItem>
+  <TabItem label="Deno (JSR)">
+    ```ts
+    import { Conversion, UNITS, LABELS } from "jsr:@devhaven/unit-conversion";
+    ```
+  </TabItem>
+</Tabs>
+
+## Usage Guide
+
+<Steps>
+
+1. **Create a `Conversion` instance**
+
+   Instantiate `Conversion` with default settings (`isFloat: true`, `decimals: 2`) or pass a custom configuration object:
+
+   ```ts
+   import { Conversion } from "@devhaven/unit-conversion";
+
+   // Default configuration: { isFloat: true, decimals: 2, locale: undefined }
+   const convert = new Conversion();
+
+   // Custom configuration
+   const preciseConvert = new Conversion({
+     decimals: 4,
+     isFloat: true,
+     locale: "en-US",
+   });
+   ```
+
+2. **Convert values with `.from()` and `.to()`**
+
+   Pass a `number` or numeric `string` directly to the `convert` function (or call `convert.value(...)`), specify the source unit with `.from()`, and choose the target unit with `.to()`:
+
+   ```ts
+   // Callable syntax (recommended)
+   const length = convert(25).from("kilometer").to("mile");
+   console.log(length);
+   // { value: 15.53, unit: "mi" }
+
+   // Method syntax (backward-compatible)
+   const temp = convert.value("100").from("celsius").to("kelvin");
+   console.log(temp);
+   // { value: 373.15, unit: "K" }
+   ```
+
+3. **Use exported constants & TypeScript types**
+
+   In addition to `Conversion`, you can import unit lists, unit symbol labels, and TypeScript union types for building UIs or validating inputs:
+
+   ```ts
+   import {
+     UNITS,
+     LABELS,
+     getUnitCategory,
+     type AllUnits,
+     type LengthUnits,
+     type ConversionConfig,
+   } from "@devhaven/unit-conversion";
+
+   // List all supported length units
+   console.log(UNITS.length);
+   // ["meter", "kilometer", "centimeter", "millimeter", "inch", "foot", "yard", "mile"]
+
+   // Look up the display symbol for a unit
+   console.log(LABELS.kilometer); // "km"
+   console.log(LABELS.celsius);   // "°C"
+
+   // Determine which category a unit belongs to
+   console.log(getUnitCategory("pascal")); // "pressure"
+   ```
+
+</Steps>
+
+<Aside type="note" title="Handling Invalid Inputs">
+  If an invalid numeric string is provided (e.g. `convert("abc")`) or if a number base conversion receives out-of-range digits (such as negative numbers or non-binary digits in `binary`), `.to()` will throw a descriptive `Error`.
+</Aside>
+
+## Next Steps
+
+<CardGrid>
+  <LinkCard
+    title="API Reference"
+    description="Detailed documentation on ConversionConfig options and exported utilities."
+    href="/api-reference/"
+  />
+  <LinkCard
+    title="Interactive Playground"
+    description="Test all unit categories and configuration options directly in your browser."
+    href="/playground/"
+  />
+</CardGrid>

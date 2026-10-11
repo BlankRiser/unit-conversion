@@ -1,6 +1,7 @@
+import { fileURLToPath } from "node:url";
 import starlight from "@astrojs/starlight";
+import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
-
 import starlightThemeRapide from "starlight-theme-rapide";
 
 // https://astro.build/config
@@ -9,18 +10,12 @@ export default defineConfig({
     starlight({
       title: "Unit Conversion",
       plugins: [starlightThemeRapide()],
+      customCss: ["./src/styles/global.css"],
       expressiveCode: {
         // Look at ec.config.mjs instead
       },
       social: [{ icon: "github", label: "GitHub", href: "https://github.com/BlankRiser/unit-conversion" }],
       sidebar: [
-        // {
-        //   label: "Guides",
-        //   items: [
-        //     // Each item here is one entry in the navigation menu.
-        //     { label: "Example Guide", slug: "guides/example" },
-        //   ],
-        // },
         {
           label: "Overview",
           slug: "index",
@@ -34,10 +29,28 @@ export default defineConfig({
           slug: "api-reference",
         },
         {
+          label: "Playground",
+          slug: "playground",
+        },
+        {
           label: "Conversions",
           autogenerate: { directory: "conversions" },
         },
       ],
     }),
   ],
+
+  vite: {
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ["@devhaven/unit-conversion"],
+    },
+    resolve: {
+      alias: {
+        "@devhaven/unit-conversion": fileURLToPath(
+          new URL("../../packages/unit-conversion/src/index.ts", import.meta.url),
+        ),
+      },
+    },
+  },
 });

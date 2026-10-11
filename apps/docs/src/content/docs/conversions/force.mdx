@@ -20,19 +20,19 @@ import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion();
 
-convert.value(10).from("newton").to("dyne");
-convert.value(5000).from("dyne").to("newton");
+convert(10).from("newton").to("dyne");
+convert(5000).from("dyne").to("newton");
 ```
 
 ## Common Conversions
 ### Newton ↔ Kilogram-Force
 ```ts
-convert.value(1).from("newton").to("kilogram-force");
-convert.value(1).from("kilogram-force").to("newton");
+convert(1).from("newton").to("kilogram-force");
+convert(1).from("kilogram-force").to("newton");
 ```
 
 ### Newton ↔ Pound-Force
 ```ts
-convert.value(1).from("newton").to("pound-force");
-convert.value(1).from("pound-force").to("newton");
+convert(1).from("newton").to("pound-force");
+convert(1).from("pound-force").to("newton");
 ```

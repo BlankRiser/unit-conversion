@@ -20,11 +20,11 @@ import { Conversion } from "@devhaven/unit-conversion";
 const convert = new Conversion();
 
 // Convert 100 meters → kilometers
-console.log(convert.value(100).from("meter").to("kilometer"));
+console.log(convert(100).from("meter").to("kilometer"));
 // "0.1km"
 
 // Convert 1 inch → centimeters
-console.log(convert.value(1).from("inch").to("centimeter"));
+console.log(convert(1).from("inch").to("centimeter"));
 // "2.54cm"
 ```
 
@@ -36,7 +36,7 @@ All conversions are approximate to the configured decimal precision.
 import { Conversion } from "@devhaven/unit-conversion";
 
 const convert = new Conversion({ includeUnit: false });
-convert.value(1).from("meter").to("foot");      // 3.28
+convert(1).from("meter").to("foot");      // 3.28
 ```
 
 > SI units are exact; conversions **involving** Imperial/US units are approximations due to defined ratios.
@@ -44,36 +44,36 @@ convert.value(1).from("meter").to("foot");      // 3.28
 ### Meters ↔ Kilometers
 
 ```ts
-convert.value(1000).from("meter").to("kilometer");  
-convert.value(2).from("kilometer").to("meter");     
+convert(1000).from("meter").to("kilometer");  
+convert(2).from("kilometer").to("meter");     
 ```
 
 ### Meters ↔ Feet
 
 ```ts
-convert.value(1).from("meter").to("foot");  
-convert.value(10).from("foot").to("meter"); 
+convert(1).from("meter").to("foot");  
+convert(10).from("foot").to("meter"); 
 ```
 
 ### Inches ↔ Centimeters
 
 ```ts
-convert.value(1).from("inch").to("centimeter");  
-convert.value(30).from("centimeter").to("inch"); 
+convert(1).from("inch").to("centimeter");  
+convert(30).from("centimeter").to("inch"); 
 ```
 
 ### Miles ↔ Kilometers
 
 ```ts
-convert.value(1).from("mile").to("kilometer");  
-convert.value(5).from("kilometer").to("mile");  
+convert(1).from("mile").to("kilometer");  
+convert(5).from("kilometer").to("mile");  
 ```
 
 ### Yards ↔ Meters
 
 ```ts
-convert.value(1).from("yard").to("meter");  
-convert.value(50).from("meter").to("yard"); 
+convert(1).from("yard").to("meter");  
+convert(50).from("meter").to("yard"); 
 ```
 
 ## Configuration Options
@@ -88,6 +88,6 @@ const convert = new Conversion({
   isFloat: true,     // keep decimals or round
 });
 
-const { value, unit } = convert.value(1).from("mile").to("kilometer");  
+const { value, unit } = convert(1).from("mile").to("kilometer");  
 console.log(value, unit); 
 ```

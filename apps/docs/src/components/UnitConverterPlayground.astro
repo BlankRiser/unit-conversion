@@ -1,0 +1,967 @@
+---
+import { CONVERSION_FACTORS, LABELS, UNITS } from "@devhaven/unit-conversion";
+
+const categoryMeta: Record<string, { label: string; description: string }> = {
+  length: {
+    label: "Length",
+    description:
+      "SI metric and Imperial/US distance measurements (base: meter)",
+  },
+  temperature: {
+    label: "Temperature",
+    description: "Thermodynamic temperature scales (base: kelvin)",
+  },
+  weight: {
+    label: "Weight",
+    description: "Metric and Imperial mass/weight units (base: gram)",
+  },
+  volume: {
+    label: "Volume",
+    description: "Liquid and cubic volume measurements (base: liter)",
+  },
+  time: {
+    label: "Time",
+    description: "Duration units from milliseconds to weeks (base: second)",
+  },
+  number: {
+    label: "Number",
+    description: "Radix / number base conversions (base: decimal)",
+  },
+  pressure: {
+    label: "Pressure",
+    description: "Force per unit area measurements (base: pascal)",
+  },
+  energy: {
+    label: "Energy",
+    description: "Work, heat, and electrical energy units (base: joule)",
+  },
+  force: {
+    label: "Force",
+    description: "Mechanical force units (base: newton)",
+  },
+};
+
+// Build list of active categories and their supported units
+const categories = Object.keys(UNITS)
+  .filter((cat) => cat in CONVERSION_FACTORS)
+  .map((cat) => {
+    const rawUnits = UNITS[cat as keyof typeof UNITS] as string[];
+    const factorMap = CONVERSION_FACTORS[cat] ?? {};
+    const supportedUnits = rawUnits.filter((u) => u in factorMap);
+    return {
+      id: cat,
+      label:
+        categoryMeta[cat]?.label ?? cat.charAt(0).toUpperCase() + cat.slice(1),
+      description: categoryMeta[cat]?.description ?? "",
+      units: supportedUnits.map((u) => ({
+        id: u,
+        symbol: LABELS[u as keyof typeof LABELS] ?? u,
+      })),
+    };
+  })
+  .filter((c) => c.units.length > 0);
+
+const locales = [
+  { value: "", label: "None (Default)" },
+  { value: "en-US", label: "en-US — English (US)" },
+  { value: "en-GB", label: "en-GB — English (UK)" },
+  { value: "de-DE", label: "de-DE — German (Germany)" },
+  { value: "fr-FR", label: "fr-FR — French (France)" },
+  { value: "hi-IN", label: "hi-IN — Hindi (India)" },
+  { value: "ar-EG", label: "ar-EG — Arabic (Egypt)" },
+  { value: "ru-RU", label: "ru-RU — Russian (Russia)" },
+  { value: "ja-JP", label: "ja-JP — Japanese (Japan)" },
+  { value: "zh-CN", label: "zh-CN — Chinese (China)" },
+  { value: "pt-BR", label: "pt-BR — Portuguese (Brazil)" },
+];
+---
+
+<div
+  class="uc-playground not-content my-4 mb-8 flex flex-col gap-6 font-[var(--sl-font)] text-[var(--sl-color-text)]"
+  data-categories={JSON.stringify(categories)}
+>
+  <!-- 1. Category Selector Tabs -->
+  <div
+    class="rounded-lg border border-[var(--sl-rapide-ui-border-color,var(--sl-color-gray-5))] bg-[var(--sl-rapide-ui-bg-color,var(--sl-color-gray-7))] p-5"
+  >
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+      <span
+        class="text-xs font-semibold tracking-wider text-[var(--sl-color-accent-high)] uppercase"
+      >
+        1. Select Category
+      </span>
+      <span class="text-xs text-[var(--sl-color-gray-3)]" id="uc-category-desc">
+        {categories[0]?.description}
+      </span>
+    </div>
+    <div
+      class="flex flex-wrap gap-2"
+      role="tablist"
+      aria-label="Unit Categories"
+    >
+      {
+        categories.map((cat, idx) => (
+          <button
+            type="button"
+            role="tab"
+            class:list={[
+              "uc-tab inline-flex cursor-pointer items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors duration-150",
+              idx === 0
+                ? "border-(--sl-color-green,var(--sl-color-accent)) bg-(--sl-color-green-low,var(--sl-color-accent-low)) text-(--sl-color-green-high,var(--sl-color-accent-high))"
+                : "border-(--sl-color-gray-5) bg-(--sl-color-black) text-(--sl-color-gray-2) hover:border-(--sl-color-gray-3) hover:text-(--sl-color-white)",
+            ]}
+            aria-selected={idx === 0 ? "true" : "false"}
+            data-category={cat.id}
+          >
+            <span>{cat.label}</span>
+            <span
+              class:list={[
+                "uc-tab-count rounded-full px-1.5 py-0.5 text-[0.7rem] tabular-nums",
+                idx === 0
+                  ? "bg-(--sl-color-black) text-(--sl-color-green-high,var(--sl-color-accent-high))"
+                  : "bg-(--sl-color-gray-6) text-(--sl-color-gray-3)",
+              ]}
+            >
+              {cat.units.length}
+            </span>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Stacked Conversion Input & Configuration Options -->
+  <div class="flex flex-col gap-6">
+    <!-- 2. Conversion Input -->
+    <div
+      class="flex flex-col gap-4 rounded-lg border border-[var(--sl-rapide-ui-border-color,var(--sl-color-gray-5))] bg-[var(--sl-rapide-ui-bg-color,var(--sl-color-gray-7))] p-5"
+    >
+      <div class="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <span
+          class="text-xs font-semibold tracking-wider text-[var(--sl-color-accent-high)] uppercase"
+        >
+          2. Conversion Input
+        </span>
+        <div
+          class="flex flex-wrap gap-1.5"
+          id="uc-presets"
+          aria-label="Quick preset values"
+        >
+        </div>
+      </div>
+
+      <div class="flex flex-1 flex-col gap-1.5">
+        <label
+          for="uc-value-input"
+          class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+        >
+          Value to convert
+        </label>
+        <div class="relative flex items-center">
+          <input
+            id="uc-value-input"
+            type="text"
+            inputmode="decimal"
+            value="100"
+            placeholder="Enter a number..."
+            class="w-full rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] py-2.5 pr-18 pl-3 font-mono text-base text-[var(--sl-color-white)] transition-colors duration-150 focus:border-[var(--sl-color-accent)] focus:outline-none"
+            autocomplete="off"
+          />
+          <span
+            class="pointer-events-none absolute right-2.5 rounded bg-[var(--sl-color-gray-6)] px-2 py-0.5 font-mono text-xs text-[var(--sl-color-gray-3)]"
+            id="uc-input-unit-badge"
+          >
+            m
+          </span>
+        </div>
+      </div>
+
+      <div
+        class="grid grid-cols-1 items-end gap-2.5 sm:grid-cols-[1fr_auto_1fr]"
+      >
+        <div class="flex flex-1 flex-col gap-1.5">
+          <label
+            for="uc-from-select"
+            class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+          >
+            From Unit
+          </label>
+          <select
+            id="uc-from-select"
+            class="w-full rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-3 py-2.5 text-sm text-[var(--sl-color-white)] transition-colors duration-150 focus:border-[var(--sl-color-accent)] focus:outline-none"
+          >
+          </select>
+        </div>
+
+        <button
+          type="button"
+          id="uc-swap-btn"
+          class="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] text-[var(--sl-color-gray-2)] transition-colors duration-150 hover:border-[var(--sl-color-accent)] hover:text-[var(--sl-color-accent-high)]"
+          title="Swap From and To units"
+          aria-label="Swap From and To units"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M7 16V4M7 4L3 8M7 4L11 8"></path>
+            <path d="M17 8v12m0 0 4-4m-4 4-4-4"></path>
+          </svg>
+        </button>
+
+        <div class="flex flex-1 flex-col gap-1.5">
+          <label
+            for="uc-to-select"
+            class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+          >
+            To Unit
+          </label>
+          <select
+            id="uc-to-select"
+            class="w-full rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-3 py-2.5 text-sm text-[var(--sl-color-white)] transition-colors duration-150 focus:border-[var(--sl-color-accent)] focus:outline-none"
+          >
+          </select>
+        </div>
+      </div>
+
+      <!-- Result Banner -->
+      <div
+        class="mt-auto flex flex-col gap-2 rounded-lg border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] p-4"
+        id="uc-result-box"
+        aria-live="polite"
+      >
+        <div class="flex items-center justify-between gap-2">
+          <span
+            class="font-mono text-xs text-[var(--sl-color-gray-3)]"
+            id="uc-result-formula"
+          >
+            100 meter → kilometer
+          </span>
+          <span
+            class="rounded-full bg-[var(--sl-color-gray-6)] px-2 py-0.5 font-mono text-[0.7rem] text-[var(--sl-color-gray-2)]"
+            id="uc-result-type"
+          >
+            number
+          </span>
+        </div>
+        <div class="flex flex-wrap items-baseline gap-2 py-1">
+          <span
+            class="font-mono text-2xl font-bold break-all text-[var(--sl-color-white)]"
+            id="uc-result-value"
+          >
+            0.1
+          </span>
+          <span
+            class="font-mono text-base font-medium text-[var(--sl-color-accent-high)]"
+            id="uc-result-unit"
+          >
+            km
+          </span>
+        </div>
+        <div
+          class="overflow-x-auto border-t border-[var(--sl-color-gray-6)] pt-2 text-xs text-[var(--sl-color-gray-3)]"
+        >
+          <code id="uc-result-json">{`{ value: 0.1, unit: "km" }`}</code>
+        </div>
+        <div
+          class="text-xs font-medium text-[var(--sl-color-red-high)]"
+          id="uc-error-message"
+          hidden
+        >
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Configuration Options & Live Code -->
+    <div
+      class="flex flex-col gap-4 rounded-lg border border-[var(--sl-rapide-ui-border-color,var(--sl-color-gray-5))] bg-[var(--sl-rapide-ui-bg-color,var(--sl-color-gray-7))] p-5"
+    >
+      <div class="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <span
+          class="text-xs font-semibold tracking-wider text-[var(--sl-color-accent-high)] uppercase"
+        >
+          3. Configuration Options
+        </span>
+        <button
+          type="button"
+          id="uc-reset-config"
+          class="cursor-pointer border-none bg-transparent p-0 text-xs text-(--sl-color-gray-3) underline hover:text-(--sl-color-accent-high)"
+        >
+          Reset defaults
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-3.5">
+        <div
+          class="flex items-center justify-between gap-4 border-b border-(--sl-color-gray-6) pb-3"
+        >
+          <div class="flex flex-col gap-0.5">
+            <label
+              for="uc-is-float"
+              class="text-xs font-medium text-(--sl-color-gray-2)"
+            >
+              Floating-point (<code>isFloat</code>)
+            </label>
+            <span class="text-xs text-(--sl-color-gray-3)">
+              When disabled, rounds result with <code>Math.round()</code>
+            </span>
+          </div>
+          <input
+            id="uc-is-float"
+            type="checkbox"
+            checked
+            class="h-4.5 w-4.5 cursor-pointer accent-(--sl-color-accent)"
+          />
+        </div>
+
+        <div
+          class="flex items-center justify-between gap-4 border-b border-(--sl-color-gray-6) pb-3 transition-opacity"
+          id="uc-decimals-row"
+        >
+          <div class="flex flex-col gap-0.5">
+            <label
+              for="uc-decimals"
+              class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+            >
+              Decimal places (<code>decimals</code>): <strong
+                id="uc-decimals-val">2</strong
+              >
+            </label>
+            <span class="text-xs text-[var(--sl-color-gray-3)]">
+              Precision between 0 and 20 decimal places
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input
+              id="uc-decimals"
+              type="range"
+              min="0"
+              max="12"
+              step="1"
+              value="2"
+              class="w-26 cursor-pointer accent-[var(--sl-color-accent)]"
+            />
+            <input
+              id="uc-decimals-num"
+              type="number"
+              min="0"
+              max="20"
+              step="1"
+              value="2"
+              class="w-15 rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-2 py-1 text-center font-mono text-sm text-[var(--sl-color-white)] focus:border-[var(--sl-color-accent)] focus:outline-none"
+              aria-label="Decimal places number"
+            />
+          </div>
+        </div>
+
+        <div
+          class="flex flex-col items-stretch gap-2 border-b border-[var(--sl-color-gray-6)] pb-3"
+        >
+          <div class="flex flex-col gap-0.5">
+            <label
+              for="uc-locale"
+              class="text-xs font-medium text-[var(--sl-color-gray-2)]"
+            >
+              Locale formatting (<code>locale</code>)
+            </label>
+            <span class="text-xs text-[var(--sl-color-gray-3)]">
+              Formats numeric output via <code>toLocaleString(locale)</code>
+            </span>
+          </div>
+          <select
+            id="uc-locale"
+            class="w-full rounded-md border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-3 py-2.5 text-sm text-[var(--sl-color-white)] transition-colors duration-150 focus:border-[var(--sl-color-accent)] focus:outline-none"
+          >
+            {
+              locales.map((loc) => (
+                <option value={loc.value}>{loc.label}</option>
+              ))
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Live Code Preview -->
+      <div
+        class="mt-auto overflow-hidden rounded-lg border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)]"
+      >
+        <div
+          class="flex items-center justify-between border-b border-[var(--sl-color-gray-6)] bg-[var(--sl-color-gray-7)] px-3 py-2"
+        >
+          <span
+            class="text-[0.72rem] font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+          >
+            TypeScript Usage
+          </span>
+          <button
+            type="button"
+            id="uc-copy-code"
+            class="cursor-pointer rounded border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-2 py-0.5 text-[0.72rem] text-[var(--sl-color-gray-2)] hover:border-[var(--sl-color-accent)] hover:text-[var(--sl-color-accent-high)]"
+          >
+            Copy code
+          </button>
+        </div>
+        <pre
+          class="m-0 overflow-x-auto px-3.5 py-3 font-mono text-[0.78rem] leading-relaxed text-[var(--sl-color-gray-1)]"><code id="uc-code-preview" /></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- All Units in Category Table -->
+  <div
+    class="rounded-lg border border-[var(--sl-rapide-ui-border-color,var(--sl-color-gray-5))] bg-[var(--sl-rapide-ui-bg-color,var(--sl-color-gray-7))] p-5"
+  >
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+      <div>
+        <span
+          class="text-xs font-semibold tracking-wider text-[var(--sl-color-accent-high)] uppercase"
+          id="uc-table-title"
+        >
+          All Length Conversions
+        </span>
+        <p class="mt-1 mb-0 text-xs text-[var(--sl-color-gray-3)]">
+          Showing live conversions from <strong id="uc-table-from-summary"
+            >100 meter</strong
+          > to every unit in this category. Click any row to set it as the target
+          unit.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="overflow-x-auto rounded-lg border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)]"
+    >
+      <table class="w-full border-collapse text-left text-sm">
+        <thead>
+          <tr>
+            <th
+              class="border-b border-[var(--sl-color-gray-5)] bg-[var(--sl-color-gray-7)] px-3.5 py-2.5 text-xs font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+            >
+              Target Unit
+            </th>
+            <th
+              class="border-b border-[var(--sl-color-gray-5)] bg-[var(--sl-color-gray-7)] px-3.5 py-2.5 text-xs font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+            >
+              Label / Symbol
+            </th>
+            <th
+              class="border-b border-[var(--sl-color-gray-5)] bg-[var(--sl-color-gray-7)] px-3.5 py-2.5 text-xs font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+            >
+              Converted Value
+            </th>
+            <th
+              class="border-b border-[var(--sl-color-gray-5)] bg-[var(--sl-color-gray-7)] px-3.5 py-2.5 text-xs font-semibold tracking-wider text-[var(--sl-color-gray-3)] uppercase"
+            >
+              Return Object
+            </th>
+          </tr>
+        </thead>
+        <tbody
+          id="uc-all-units-body"
+          class="divide-y divide-[var(--sl-color-gray-6)]"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { Conversion, type AllUnits } from "@devhaven/unit-conversion";
+
+  interface UnitInfo {
+    id: string;
+    symbol: string;
+  }
+
+  interface CategoryInfo {
+    id: string;
+    label: string;
+    description: string;
+    units: UnitInfo[];
+  }
+
+  const categoryPresets: Record<string, string[]> = {
+    length: ["1", "10", "100", "1000", "5280"],
+    temperature: ["-40", "0", "37", "100", "273.15"],
+    weight: ["1", "16", "100", "453.592", "1000"],
+    volume: ["1", "10", "250", "1000"],
+    time: ["1", "60", "3600", "86400"],
+    number: ["0", "10", "42", "255", "1010"],
+    pressure: ["1", "14.696", "100", "101325"],
+    energy: ["1", "100", "1000", "3600"],
+    force: ["1", "9.80665", "100", "1000"],
+  };
+
+  const TAB_ACTIVE_CLASSES = [
+    "border-[var(--sl-color-green,var(--sl-color-accent))]",
+    "bg-[var(--sl-color-green-low,var(--sl-color-accent-low))]",
+    "text-[var(--sl-color-green-high,var(--sl-color-accent-high))]",
+  ];
+  const TAB_INACTIVE_CLASSES = [
+    "border-[var(--sl-color-gray-5)]",
+    "bg-[var(--sl-color-black)]",
+    "text-[var(--sl-color-gray-2)]",
+    "hover:border-[var(--sl-color-gray-3)]",
+    "hover:text-[var(--sl-color-white)]",
+  ];
+  const COUNT_ACTIVE_CLASSES = [
+    "bg-[var(--sl-color-black)]",
+    "text-[var(--sl-color-green-high,var(--sl-color-accent-high))]",
+  ];
+  const COUNT_INACTIVE_CLASSES = [
+    "bg-[var(--sl-color-gray-6)]",
+    "text-[var(--sl-color-gray-3)]",
+  ];
+
+  function formatUnitName(unitId: string): string {
+    if (unitId === "base8") return "Octal (base8)";
+    if (unitId === "psi") return "PSI (psi)";
+    return unitId
+      .split("-")
+      .map((part) =>
+        part === "us"
+          ? "US"
+          : part === "uk"
+            ? "UK"
+            : part.charAt(0).toUpperCase() + part.slice(1),
+      )
+      .join(" ");
+  }
+
+  function initPlayground() {
+    const root = document.querySelector(".uc-playground") as HTMLElement | null;
+    if (!root) return;
+
+    const categories: CategoryInfo[] = JSON.parse(
+      root.dataset.categories || "[]",
+    );
+    if (!categories.length) return;
+
+    const tabButtons = Array.from(
+      root.querySelectorAll<HTMLButtonElement>(".uc-tab"),
+    );
+    const categoryDescEl = document.getElementById("uc-category-desc")!;
+    const presetsContainer = document.getElementById("uc-presets")!;
+    const valueInput = document.getElementById(
+      "uc-value-input",
+    ) as HTMLInputElement;
+    const inputUnitBadge = document.getElementById("uc-input-unit-badge")!;
+    const fromSelect = document.getElementById(
+      "uc-from-select",
+    ) as HTMLSelectElement;
+    const toSelect = document.getElementById(
+      "uc-to-select",
+    ) as HTMLSelectElement;
+    const swapBtn = document.getElementById("uc-swap-btn") as HTMLButtonElement;
+
+    const resultBox = document.getElementById("uc-result-box")!;
+    const resultFormula = document.getElementById("uc-result-formula")!;
+    const resultType = document.getElementById("uc-result-type")!;
+    const resultValue = document.getElementById("uc-result-value")!;
+    const resultUnit = document.getElementById("uc-result-unit")!;
+    const resultJson = document.getElementById("uc-result-json")!;
+    const errorMessage = document.getElementById("uc-error-message")!;
+
+    const isFloatInput = document.getElementById(
+      "uc-is-float",
+    ) as HTMLInputElement;
+    const decimalsRange = document.getElementById(
+      "uc-decimals",
+    ) as HTMLInputElement;
+    const decimalsNum = document.getElementById(
+      "uc-decimals-num",
+    ) as HTMLInputElement;
+    const decimalsVal = document.getElementById("uc-decimals-val")!;
+    const decimalsRow = document.getElementById("uc-decimals-row")!;
+    const localeSelect = document.getElementById(
+      "uc-locale",
+    ) as HTMLSelectElement;
+    const resetConfigBtn = document.getElementById(
+      "uc-reset-config",
+    ) as HTMLButtonElement;
+
+    const codePreview = document.getElementById("uc-code-preview")!;
+    const copyCodeBtn = document.getElementById(
+      "uc-copy-code",
+    ) as HTMLButtonElement;
+
+    const tableTitle = document.getElementById("uc-table-title")!;
+    const tableFromSummary = document.getElementById("uc-table-from-summary")!;
+    const allUnitsBody = document.getElementById("uc-all-units-body")!;
+
+    let activeCategory = categories[0];
+
+    function renderPresets() {
+      const presets = categoryPresets[activeCategory.id] ?? ["1", "10", "100"];
+      presetsContainer.innerHTML = "";
+      for (const preset of presets) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className =
+          "cursor-pointer rounded border border-[var(--sl-color-gray-5)] bg-[var(--sl-color-black)] px-2 py-0.5 font-mono text-xs text-[var(--sl-color-gray-2)] transition-colors duration-120 hover:border-[var(--sl-color-accent)] hover:text-[var(--sl-color-accent-high)]";
+        btn.textContent = preset;
+        btn.addEventListener("click", () => {
+          valueInput.value = preset;
+          updateConversion();
+        });
+        presetsContainer.appendChild(btn);
+      }
+    }
+
+    function populateUnitSelects() {
+      fromSelect.innerHTML = "";
+      toSelect.innerHTML = "";
+
+      activeCategory.units.forEach((u) => {
+        const label =
+          activeCategory.id === "number"
+            ? `${formatUnitName(u.id)}`
+            : `${formatUnitName(u.id)} (${u.symbol})`;
+
+        const optFrom = document.createElement("option");
+        optFrom.value = u.id;
+        optFrom.textContent = label;
+        fromSelect.appendChild(optFrom);
+
+        const optTo = document.createElement("option");
+        optTo.value = u.id;
+        optTo.textContent = label;
+        toSelect.appendChild(optTo);
+      });
+
+      if (activeCategory.units.length > 1) {
+        fromSelect.value = activeCategory.units[0].id;
+        toSelect.value = activeCategory.units[1].id;
+      } else if (activeCategory.units.length === 1) {
+        fromSelect.value = activeCategory.units[0].id;
+        toSelect.value = activeCategory.units[0].id;
+      }
+    }
+
+    function getConfig() {
+      const isFloat = isFloatInput.checked;
+      const decimals = Number.parseInt(decimalsNum.value, 10);
+      const locale = localeSelect.value || undefined;
+      return {
+        isFloat,
+        decimals: Number.isNaN(decimals)
+          ? 2
+          : Math.max(0, Math.min(20, decimals)),
+        locale,
+      };
+    }
+
+    function parseInputValue(raw: string): number | string {
+      const trimmed = raw.trim();
+      if (trimmed === "") return NaN;
+      const asNum = Number(trimmed);
+      if (!Number.isNaN(asNum)) {
+        return asNum;
+      }
+      return trimmed;
+    }
+
+    function buildCodeSnippet(
+      inputVal: number | string,
+      fromUnit: string,
+      toUnit: string,
+      config: { isFloat: boolean; decimals: number; locale?: string },
+      outputComment: string,
+    ) {
+      const configParts: string[] = [];
+      if (config.isFloat !== true) {
+        configParts.push(`isFloat: false`);
+      }
+      if (config.decimals !== 2 && config.isFloat) {
+        configParts.push(`decimals: ${config.decimals}`);
+      }
+      if (config.locale) {
+        configParts.push(`locale: "${config.locale}"`);
+      }
+
+      const configArg =
+        configParts.length > 0 ? `{ ${configParts.join(", ")} }` : "";
+      const formattedInput =
+        typeof inputVal === "number" && !Number.isNaN(inputVal)
+          ? String(inputVal)
+          : JSON.stringify(String(inputVal));
+
+      return [
+        `import { Conversion } from "@devhaven/unit-conversion";`,
+        ``,
+        `const convert = new Conversion(${configArg});`,
+        `const result = convert(${formattedInput}).from("${fromUnit}").to("${toUnit}");`,
+        outputComment,
+      ].join("\n");
+    }
+
+    function updateConversion() {
+      const config = getConfig();
+      decimalsRow.classList.toggle("opacity-45", !config.isFloat);
+      decimalsRange.disabled = !config.isFloat;
+      decimalsNum.disabled = !config.isFloat;
+
+      const fromUnit = fromSelect.value as AllUnits;
+      const toUnit = toSelect.value as AllUnits;
+      const fromUnitObj = activeCategory.units.find((u) => u.id === fromUnit);
+      inputUnitBadge.textContent =
+        activeCategory.id === "number"
+          ? fromUnit
+          : (fromUnitObj?.symbol ?? fromUnit);
+
+      const rawValue = valueInput.value;
+      const parsedValue = parseInputValue(rawValue);
+
+      const convert = new Conversion(config);
+      const runConvert = (val: number | string) => convert(val);
+
+      resultFormula.textContent = `${rawValue.trim() || "?"} ${fromUnit} → ${toUnit}`;
+      tableTitle.textContent = `All ${activeCategory.label} Conversions`;
+      tableFromSummary.textContent = `${rawValue.trim() || "?"} ${fromUnit}`;
+
+      // Primary conversion
+      try {
+        if (rawValue.trim() === "") {
+          throw new Error("Please enter a value to convert.");
+        }
+        const res = runConvert(parsedValue)
+          .from(fromUnit)
+          .to(toUnit as never);
+        resultBox.classList.remove(
+          "border-[var(--sl-color-red)]",
+          "bg-[var(--sl-color-red-low)]",
+        );
+        resultBox.classList.add(
+          "border-[var(--sl-color-gray-5)]",
+          "bg-[var(--sl-color-black)]",
+        );
+        errorMessage.hidden = true;
+        resultValue.textContent = String(res.value);
+        resultUnit.textContent =
+          activeCategory.id === "number" ? `(${toUnit})` : res.unit;
+        resultType.textContent = typeof res.value;
+
+        const jsonStr = `{ value: ${JSON.stringify(res.value)}, unit: ${JSON.stringify(res.unit)} }`;
+        resultJson.textContent = jsonStr;
+
+        codePreview.textContent = buildCodeSnippet(
+          parsedValue,
+          fromUnit,
+          toUnit,
+          config,
+          `// => ${jsonStr}`,
+        );
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        resultBox.classList.remove(
+          "border-[var(--sl-color-gray-5)]",
+          "bg-[var(--sl-color-black)]",
+        );
+        resultBox.classList.add(
+          "border-[var(--sl-color-red)]",
+          "bg-[var(--sl-color-red-low)]",
+        );
+        errorMessage.hidden = false;
+        errorMessage.textContent = msg;
+        resultValue.textContent = "—";
+        resultUnit.textContent = "";
+        resultType.textContent = "error";
+        resultJson.textContent = `Error: ${msg}`;
+
+        codePreview.textContent = buildCodeSnippet(
+          rawValue.trim(),
+          fromUnit,
+          toUnit,
+          config,
+          `// Throws Error: ${msg}`,
+        );
+      }
+
+      // All units table
+      allUnitsBody.innerHTML = "";
+      for (const target of activeCategory.units) {
+        const tr = document.createElement("tr");
+        const isSelected = target.id === toUnit;
+        tr.className = isSelected
+          ? "cursor-pointer transition-colors duration-100 bg-[var(--sl-color-green-low,var(--sl-color-accent-low))]"
+          : "cursor-pointer transition-colors duration-100 hover:bg-[var(--sl-color-gray-7)]";
+
+        tr.addEventListener("click", () => {
+          toSelect.value = target.id;
+          updateConversion();
+        });
+
+        const tdName = document.createElement("td");
+        tdName.className =
+          "px-3.5 py-2.5 align-middle flex flex-wrap items-center gap-2";
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "font-medium text-[var(--sl-color-white)]";
+        nameSpan.textContent = formatUnitName(target.id);
+        const codeId = document.createElement("code");
+        codeId.className =
+          "rounded bg-[var(--sl-color-gray-6)] px-1.5 py-0.5 font-mono text-[0.72rem] text-[var(--sl-color-gray-3)]";
+        codeId.textContent = `"${target.id}"`;
+        tdName.append(nameSpan, codeId);
+
+        const tdSymbol = document.createElement("td");
+        tdSymbol.className = "px-3.5 py-2.5 align-middle";
+        const symCode = document.createElement("code");
+        symCode.className = "font-mono text-xs text-[var(--sl-color-gray-2)]";
+        symCode.textContent = target.symbol;
+        tdSymbol.appendChild(symCode);
+
+        const tdVal = document.createElement("td");
+        tdVal.className =
+          "px-3.5 py-2.5 align-middle font-mono text-[var(--sl-color-white)]";
+
+        const tdObj = document.createElement("td");
+        tdObj.className = "px-3.5 py-2.5 align-middle";
+
+        try {
+          if (rawValue.trim() === "") {
+            throw new Error("Empty input");
+          }
+          const r = runConvert(parsedValue)
+            .from(fromUnit)
+            .to(target.id as never);
+          const strong = document.createElement("strong");
+          strong.textContent = String(r.value);
+          const unitSub = document.createElement("span");
+          unitSub.className = "text-xs text-[var(--sl-color-accent-high)]";
+          unitSub.textContent =
+            activeCategory.id === "number" ? "" : ` ${r.unit}`;
+          tdVal.append(strong, unitSub);
+
+          const objCode = document.createElement("code");
+          objCode.className = "font-mono text-xs text-[var(--sl-color-gray-3)]";
+          objCode.textContent = `{ value: ${JSON.stringify(r.value)}, unit: ${JSON.stringify(r.unit)} }`;
+          tdObj.appendChild(objCode);
+        } catch (err) {
+          const errSpan = document.createElement("span");
+          errSpan.className = "text-xs text-[var(--sl-color-red-high)]";
+          errSpan.textContent =
+            err instanceof Error ? err.message : "Invalid input";
+          tdVal.appendChild(errSpan);
+
+          const dash = document.createElement("span");
+          dash.className = "text-xs text-[var(--sl-color-red-high)]";
+          dash.textContent = "—";
+          tdObj.appendChild(dash);
+        }
+
+        tr.append(tdName, tdSymbol, tdVal, tdObj);
+        allUnitsBody.appendChild(tr);
+      }
+    }
+
+    // Event listeners
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const catId = btn.dataset.category;
+        const found = categories.find((c) => c.id === catId);
+        if (!found) return;
+
+        activeCategory = found;
+        tabButtons.forEach((b) => {
+          const isCurrent = b === btn;
+          b.setAttribute("aria-selected", isCurrent ? "true" : "false");
+          const countEl = b.querySelector(".uc-tab-count");
+          if (isCurrent) {
+            b.classList.remove(...TAB_INACTIVE_CLASSES);
+            b.classList.add(...TAB_ACTIVE_CLASSES);
+            countEl?.classList.remove(...COUNT_INACTIVE_CLASSES);
+            countEl?.classList.add(...COUNT_ACTIVE_CLASSES);
+          } else {
+            b.classList.remove(...TAB_ACTIVE_CLASSES);
+            b.classList.add(...TAB_INACTIVE_CLASSES);
+            countEl?.classList.remove(...COUNT_ACTIVE_CLASSES);
+            countEl?.classList.add(...COUNT_INACTIVE_CLASSES);
+          }
+        });
+
+        categoryDescEl.textContent = activeCategory.description;
+
+        // Pick a sensible default value for the category
+        if (activeCategory.id === "number") {
+          valueInput.value = "10";
+        } else if (activeCategory.id === "temperature") {
+          valueInput.value = "100";
+        } else {
+          valueInput.value = "1";
+        }
+
+        renderPresets();
+        populateUnitSelects();
+        updateConversion();
+      });
+    });
+
+    valueInput.addEventListener("input", updateConversion);
+    fromSelect.addEventListener("change", updateConversion);
+    toSelect.addEventListener("change", updateConversion);
+
+    swapBtn.addEventListener("click", () => {
+      const prevFrom = fromSelect.value;
+      fromSelect.value = toSelect.value;
+      toSelect.value = prevFrom;
+      updateConversion();
+    });
+
+    isFloatInput.addEventListener("change", updateConversion);
+
+    decimalsRange.addEventListener("input", () => {
+      decimalsNum.value = decimalsRange.value;
+      decimalsVal.textContent = decimalsRange.value;
+      updateConversion();
+    });
+
+    decimalsNum.addEventListener("input", () => {
+      const n = Math.max(
+        0,
+        Math.min(20, Number.parseInt(decimalsNum.value || "0", 10)),
+      );
+      decimalsRange.value = String(Math.min(12, n));
+      decimalsVal.textContent = String(Number.isNaN(n) ? 2 : n);
+      updateConversion();
+    });
+
+    localeSelect.addEventListener("change", updateConversion);
+
+    resetConfigBtn.addEventListener("click", () => {
+      isFloatInput.checked = true;
+      decimalsRange.value = "2";
+      decimalsNum.value = "2";
+      decimalsVal.textContent = "2";
+      localeSelect.value = "";
+      updateConversion();
+    });
+
+    copyCodeBtn.addEventListener("click", async () => {
+      const code = codePreview.textContent || "";
+      try {
+        await navigator.clipboard.writeText(code);
+        const orig = copyCodeBtn.textContent;
+        copyCodeBtn.textContent = "Copied!";
+        setTimeout(() => {
+          copyCodeBtn.textContent = orig;
+        }, 1500);
+      } catch {
+        // Fallback ignored if clipboard unavailable
+      }
+    });
+
+    // Initial render
+    renderPresets();
+    populateUnitSelects();
+    updateConversion();
+  }
+
+  initPlayground();
+  document.addEventListener("astro:page-load", initPlayground);
+</script>
