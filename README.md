@@ -10,7 +10,6 @@
   </p>
 
   <p>
-    <a href="https://github.com/BlankRiser/unit-conversion/actions?query=branch%3Amain"><img src="https://github.com/BlankRiser/unit-conversion/actions/workflows/release.yml/badge.svg?event=push&branch=main" alt="Release CI Status" /></a>
     <a href="https://www.npmjs.com/package/@devhaven/unit-conversion"><img src="https://img.shields.io/npm/v/@devhaven/unit-conversion?label=npm" alt="npm version" /></a>
     <a href="https://jsr.io/@devhaven/unit-conversion"><img src="https://img.shields.io/jsr/v/@devhaven/unit-conversion" alt="JSR version" /></a>
     <a href="https://opensource.org/licenses/apache-2-0"><img src="https://img.shields.io/github/license/BlankRiser/unit-conversion" alt="Apache-2.0 License" /></a>

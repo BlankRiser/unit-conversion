@@ -140,3 +140,21 @@ When a GitHub Release is created, the **Update SDK Version & Publish Release** w
 5. **Builds & Publishes**: Builds the distribution bundle (`bun run convert build`) and publishes `@devhaven/unit-conversion` to **npm** (`npm publish --provenance --access=public`) and **JSR** (`npx jsr publish`).
 
 *(You can also trigger `.github/workflows/update-version.yml` manually from the **Actions** tab via `workflow_dispatch` by entering a `version` input.)*
+
+### Troubleshooting Release & OIDC Failures
+
+If a release workflow fails when publishing to **npm** or **JSR**, check the **OIDC (OpenID Connect) Trusted Publisher** status and configuration first:
+
+1. **Verify npm Trusted Publisher OIDC Settings (`E404` / `ENEEDAUTH`)**
+   - Go to **[npmjs.com → `@devhaven/unit-conversion` → Settings → Publishing access](https://www.npmjs.com/package/@devhaven/unit-conversion/access)**.
+   - Confirm that the **Trusted Publisher** connection is active and matches:
+     - **Organization or user**: `BlankRiser`
+     - **Repository**: `unit-conversion`
+     - **Workflow filename**: Must match the exact workflow file being executed (`update-version.yml` or `release.yml`).
+   - Ensure the workflow has `permissions: id-token: write`, uses `npm >= 11.5.1` (`npm install -g npm@latest`), and does **not** set `registry-url` on `actions/setup-node` or pass an empty `NODE_AUTH_TOKEN` (which overrides OIDC and causes `ENEEDAUTH`).
+
+2. **Verify JSR OIDC Linking**
+   - Go to **[jsr.io/@devhaven/unit-conversion/settings](https://jsr.io/@devhaven/unit-conversion)** and ensure the GitHub repository (`BlankRiser/unit-conversion`) is linked for OIDC publishing.
+
+3. **Verify Branch Ruleset Bypass (`GH013: Repository rule violations`)**
+   - If the version-bump commit fails to push to `main`, ensure the `RELEASE_PAT` repository secret is valid (`Contents: Read and write`) and that **Repository admin** is enabled in the `main` branch ruleset's **Bypass list** (`Settings → Rules → Rulesets`).
